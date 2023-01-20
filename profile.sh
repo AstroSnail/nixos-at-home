@@ -2,7 +2,8 @@ command=$1
 name=$2
 derivation=$3
 
-profile=/nix/var/nix/profiles/per-user/${USER}/${name}
+profile_dir=/nix/var/nix/profiles/per-user/${USER}
+profile=${profile_dir}/${name}
 
 run_update () {
   # All this just to get the next profile generation
@@ -21,10 +22,11 @@ run_update () {
   done
 
   generation=$((max_gen + 1))
-  profile_link=${profile}-${generation}-link
+  name_link=${name}-${generation}-link
+  profile_link=${profile_dir}/${name_link}
 
   ln --symbolic --no-target-directory "${derivation}" "${profile_link}"
-  ln --force --relative --symbolic --no-target-directory "${profile_link}" "${profile}"
+  ln --force --symbolic --no-target-directory "${name_link}" "${profile}"
 }
 
 # TODO: rollback
