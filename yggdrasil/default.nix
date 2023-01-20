@@ -5,7 +5,6 @@
     IfName = "yggdrasil0";
     Listen = [ "tcp://[::]:123" ];
     NodeInfo = { name = config.networking.fqdnOrHostName; };
-    Peers = [ "tcp://[2001:818:df73:f400::abba:cad:abba]:123" ];
   };
 
   systemd.services.yggdrasil-activation = {
