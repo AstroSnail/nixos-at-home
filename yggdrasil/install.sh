@@ -1,3 +1,5 @@
+# BEGIN install.sh
+
 command=$1
 profile=$2
 
@@ -9,14 +11,8 @@ activation_file=/etc/systemd/system/yggdrasil-activation.service
 activation_link=/etc/systemd/system/yggdrasil.service.requires/yggdrasil-activation.service
 activation_relative=../yggdrasil-activation.service
 
-rmlink () (
-  set -eu
-  [ -h "$1" ]
-  rm -- "$1"
-)
-
 run_install () {
-  set -e
+  set -o errexit
   ln --symbolic --no-target-directory "${profile}${service_file}" "${service_file}"
   ln --symbolic --no-target-directory "${service_relative}" "${service_link}"
   mkdir --parents "${service_requires_dir}"
@@ -25,7 +21,9 @@ run_install () {
 }
 
 run_remove () {
-  set +e
+  # keep trying to remove
+  # e.g. to remove a partially failed install
+  set +o errexit
   rmlink "${activation_link}"
   rmlink "${activation_file}"
   rmdir "${service_requires_dir}"
@@ -34,3 +32,5 @@ run_remove () {
 }
 
 "run_${command}"
+
+# END install.sh

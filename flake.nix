@@ -36,16 +36,11 @@
 
           "app-${name}" = pkgs.writeShellApplication {
             inherit name;
-            runtimeInputs = [ selfpkgs."install-${name}" ];
             text = ''
-              name=${name}
-              derivation=${selfpkgs."system-${name}"}
-              set -- "$1" "$name" "$derivation"
-            '' + (builtins.readFile "${self}/profile.sh");
+              set -- "$1" ${name} ${selfpkgs."system-${name}"}
+            '' + (builtins.readFile "${self}/profile.sh")
+              + (builtins.readFile "${self}/${name}/install.sh");
           };
-
-          "install-${name}" = pkgs.writeShellScriptBin "install-${name}"
-            (builtins.readFile "${self}/${name}/install.sh");
 
           "system-${name}" = let
             configuration = {

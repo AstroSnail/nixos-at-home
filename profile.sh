@@ -1,9 +1,24 @@
+# BEGIN profile.sh
+
 command=$1
 name=$2
 derivation=$3
 
 profile_dir=/nix/var/nix/profiles/per-user/${USER}
 profile=${profile_dir}/${name}
+
+rmlink () (
+  set -o errexit
+  set -o nounset
+  [ -h "$1" ]
+  rm -- "$1"
+)
+
+daemon_reload () {
+  systemctl daemon-reload
+}
+
+trap daemon_reload EXIT
 
 run_update () {
   # All this just to get the next profile generation
@@ -31,10 +46,6 @@ run_update () {
 
 # TODO: rollback
 
-case ${command} in
-  (install|remove) "install-${name}" "${command}" "${profile}";;
-  (update) run_update;;
-  (*) exit 1;;
-esac
+set -- "${command}" "${profile}"
 
-systemctl daemon-reload
+# END profile.sh
