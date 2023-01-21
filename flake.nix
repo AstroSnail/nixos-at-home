@@ -3,7 +3,7 @@
 
   outputs = { self, nixpkgs }:
     let
-      services = [ "yggdrasil" ];
+      services = [ "wireguard" "yggdrasil" ];
       supportedSystems = [ "x86_64-linux" ];
       lib = nixpkgs.lib;
       forAllSystems = lib.genAttrs supportedSystems;
@@ -32,34 +32,35 @@
         let
           pkgs = import nixpkgs { inherit system; };
           selfpkgs = self.packages.${system};
-        in (forAllServicesFlat (name: {
-
-          "app-${name}" = pkgs.writeShellApplication {
-            inherit name;
-            text = ''
-              set -- "$1" ${name} ${selfpkgs."system-${name}"}
-            '' + (builtins.readFile "${self}/profile.sh")
-              + (builtins.readFile "${self}/${name}/install.sh");
-          };
-
-          "system-${name}" = let
+        in (forAllServicesFlat (name:
+          let
             configuration = {
               imports = [ self.nixosModules.common self.nixosModules.${name} ];
             };
             nixos = import "${nixpkgs}/nixos" { inherit configuration system; };
-          in nixos.system;
+          in {
 
-        })) // {
+            "app-${name}" = pkgs.writeShellApplication {
+              inherit name;
+              text = ''
+                set -- "$1" ${name} ${selfpkgs."system-${name}"}
+              '' + (builtins.readFile "${self}/profile.sh")
+                + nixos.config.installScript;
+            };
 
-          devShell = pkgs.mkShell { buildInputs = [ pkgs.shellcheck ]; };
+            "system-${name}" = nixos.system;
 
-          formatter = pkgs.writeShellApplication {
-            name = "formatter";
-            runtimeInputs = [ pkgs.fd pkgs.nixfmt ];
-            text = "fd --type=file --extension=nix --exec-batch nixfmt --";
-          };
+          })) // {
 
-        });
+            devShell = pkgs.mkShell { buildInputs = [ pkgs.shellcheck ]; };
+
+            formatter = pkgs.writeShellApplication {
+              name = "formatter";
+              runtimeInputs = [ pkgs.fd pkgs.nixfmt ];
+              text = "fd --type=file --extension=nix --exec-batch nixfmt --";
+            };
+
+          });
 
     };
 }

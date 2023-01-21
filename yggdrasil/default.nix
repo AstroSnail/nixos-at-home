@@ -1,4 +1,6 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+
+{
   services.yggdrasil.enable = true;
   services.yggdrasil.persistentKeys = true;
   services.yggdrasil.settings = {
@@ -28,4 +30,6 @@
       fi
     '';
   };
+
+  installScript = builtins.readFile ./install.sh;
 }

@@ -1,10 +1,16 @@
-{ config, lib, ... }: {
+{ config, lib, ... }:
+
+{
   # skip assertions about bootability
-  boot.isContainer = lib.mkDefault true;
+  config.boot.isContainer = lib.mkDefault true;
 
   # skip warning about state versions
-  system.stateVersion = lib.mkDefault config.system.nixos.release;
+  config.system.stateVersion = lib.mkDefault config.system.nixos.release;
 
-  networking.hostName = "sea";
-  networking.domain = "astrosnail.pt.eu.org";
+  # "system-wide" config
+  config.networking.hostName = "sea";
+  config.networking.domain = "astrosnail.pt.eu.org";
+
+  # for building the app
+  options.installScript = lib.mkOption { type = lib.types.str; };
 }

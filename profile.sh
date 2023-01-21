@@ -9,9 +9,10 @@ profile=${profile_dir}/${name}
 
 rmlink () (
   set -o errexit
-  set -o nounset
-  [ -h "$1" ]
-  rm -- "$1"
+  for link
+  do [ -h "${link}" ]
+  done
+  rm -- "$@"
 )
 
 daemon_reload () {
