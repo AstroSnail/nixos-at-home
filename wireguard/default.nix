@@ -32,6 +32,6 @@
   installScript = let
     interfaces = builtins.concatStringsSep " "
       (builtins.attrNames config.networking.wireguard.interfaces);
-  in builtins.replaceStrings [ "###INTERFACES###" ] [ interfaces ]
-  (builtins.readFile ./install.sh);
+    text = builtins.readFile ./install.sh;
+  in builtins.replaceStrings [ "###INTERFACES###" ] [ interfaces ] text;
 }
