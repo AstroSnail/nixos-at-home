@@ -14,21 +14,8 @@
     description = "Activation script for yggdrasil";
     before = [ "yggdrasil.service" ];
     requiredBy = [ "yggdrasil.service" ];
+    script = config.system.activationScripts.yggdrasil;
     serviceConfig.Type = "oneshot";
-    # copied from nixos/modules/services/networking/yggdrasil.nix
-    script = let
-      keysPath = "/var/lib/yggdrasil/keys.json";
-      binYggdrasil = config.services.yggdrasil.package + "/bin/yggdrasil";
-    in ''
-      if [ ! -e ${keysPath} ]
-      then
-        mkdir --mode=700 -p ${builtins.dirOf keysPath}
-        ${binYggdrasil} -genconf -json \
-          | ${pkgs.jq}/bin/jq \
-              'to_entries|map(select(.key|endswith("Key")))|from_entries' \
-          > ${keysPath}
-      fi
-    '';
   };
 
   installScript = builtins.readFile ./install.sh;
