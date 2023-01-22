@@ -25,7 +25,7 @@
       formatter = forAllSystems (system: self.packages.${system}.formatter);
 
       nixosModules = forAllServices (name: import "${self}/${name}") // {
-        common = import "${self}/common.nix";
+        system = import "${self}/system.nix";
       };
 
       packages = forAllSystems (system:
@@ -35,7 +35,7 @@
         in (forAllServicesFlat (name:
           let
             configuration = {
-              imports = [ self.nixosModules.common self.nixosModules.${name} ];
+              imports = [ self.nixosModules.system self.nixosModules.${name} ];
             };
             nixos = import "${nixpkgs}/nixos" { inherit configuration system; };
           in {
