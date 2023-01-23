@@ -42,6 +42,7 @@
 
             "app-${name}" = pkgs.writeShellApplication {
               inherit name;
+              runtimeInputs = [ pkgs.nix ];
               text = ''
                 set -- "$1" ${name} ${selfpkgs."system-${name}"}
               '' + (builtins.readFile "${self}/profile.sh")

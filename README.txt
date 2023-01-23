@@ -13,8 +13,6 @@ Overview:
 - What if you could control this last linking step? Carefully install only the
   services you want, without installing a whole NixOS system.
 - Basically this is what this is.
-- (except i also have to handle the putting-into-a-profile step; i haven't yet
-  found which script in NixOS handles this)
 - Each "service" directory contains a kind of NixOS configuration, which
   specifies the services to enable, and an install script that installs this
   service on the existing system.
@@ -69,3 +67,7 @@ Ok but wtf is the installScript supposed to be:
   also to run the command for update as well. i should probably do it
   differently but it works for now.
 - Run `nix build .#app-foobar` to see the final result if you're curious.
+
+Thanks:
+- Me :P
+- Nerath/lun* for help figuring out the profile-setting
