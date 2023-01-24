@@ -3,7 +3,7 @@
 
   outputs = { self, nixpkgs }:
     let
-      services = [ "wireguard" "yggdrasil" ];
+      services = [ "firewall" "wireguard" "yggdrasil" ];
       supportedSystems = [ "x86_64-linux" ];
       lib = nixpkgs.lib;
       forAllSystems = lib.genAttrs supportedSystems;
