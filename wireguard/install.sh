@@ -1,7 +1,7 @@
 # BEGIN install.sh
 
-command=$1
-profile=$2
+command=${command:?"'command' variable missing!"}
+profile=${profile:?"'profile' variable missing!"}
 
 set_iface_vars () {
   service_file=/etc/systemd/system/wireguard-${interface}.service
@@ -23,7 +23,7 @@ set_peer_vars () {
   peer_relative=../${peer_file_name}
 }
 
-run_install () {
+run_install () (
   # keep trying to install
   # e.g. to install new interfaces
   set +o errexit
@@ -47,9 +47,9 @@ run_install () {
     done
   done
   echo "WARNING: if you ever edit the config, mind what's installed" >&2
-}
+)
 
-run_remove () {
+run_remove () (
   # keep trying to remove
   # e.g. to remove a partially failed install
   set +o errexit
@@ -71,8 +71,8 @@ run_remove () {
     rmlink "${target_file}"
     rmlink "${service_file}"
   done
-}
+)
 
-"run_${command}"
+"run_${command}" "$@"
 
 # END install.sh

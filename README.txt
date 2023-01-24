@@ -19,14 +19,16 @@ Overview:
 
 Usage examples:
 - `nix run .#yggdrasil update` to add/update the yggdrasil service in the
-  current user's profile.
-- `sudo nix run .#yggdrasil update` to do this on the root user's profile.
-  (this is necessary because the install scripts assume the profile directory
-  belongs to the current user, and linking to /etc requires root, and idk how
-  to do this better)
+  current user's profile directory.
+- `sudo nix run .#yggdrasil update` to do this on the root user's profile
+  directory. (this is necessary because the install scripts assume the profile
+  directory belongs to the current user, and linking to /etc requires root, and
+  idk how to do this better)
 - `sudo nix run .#yggdrasil install` to link the yggdrasil service in the
   profile to the system.
 - `sudo nix run .#yggdrasil remove` to unlink.
+- `sudo nix run .#yggdrasil env <whatever>` to run nix-env on the profile.
+- `sudo nix run .#yggdrasil help` to see a summary of things you can do.
 - You'll need to manually start and stop the service,
   e.g. `sudo systemctl start yggdrasil.service`
 - BEWARE that the install/remove script may depend on the module configuration,
@@ -56,16 +58,13 @@ Ok but wtf is the installScript supposed to be:
   contains so you can know where to link the services.
 - But you really really really should read what the NixOS system service module
   is actually doing (e.g.
-  /nix/var/nix/profiles/per-user/root/channels/nixpkgs/nixos/modules/services/networking/yggdrasil.nix
-  contains an `activationScripts` script, which i had to replicate into a new
-  sub-service).
+  <nixpkgs>/nixos/modules/services/networking/yggdrasil.nix contains an
+  `activationScripts` script, which i had to replicate into a new sub-service).
 - So, the script format is a bit messy, technically it's cat'd to other scripts
   to make the app that you get with `nix run`.
-- But data variables are passed through the positional parameters ($1 etc) to
-  make shellcheck yell less.
 - The installScript is expected to install and remove links to the profile, but
-  also to run the command for update as well. i should probably do it
-  differently but it works for now.
+  also to run the commands for the main profile script as well. i should
+  probably do it differently but it works for now.
 - Run `nix build .#app-foobar` to see the final result if you're curious.
 
 Thanks:

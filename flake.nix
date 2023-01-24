@@ -44,7 +44,8 @@
               inherit name;
               runtimeInputs = [ pkgs.nix ];
               text = ''
-                set -- "$1" ${name} ${selfpkgs."system-${name}"}
+                name=${name}
+                derivation=${selfpkgs."system-${name}"}
               '' + (builtins.readFile "${self}/profile.sh")
                 + nixos.config.installScript;
             };
