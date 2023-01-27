@@ -12,6 +12,10 @@
       APT::Periodic::Unattended-Upgrade "always";
     '';
 
+    "default/motd-news".text = ''
+      ENABLED=0
+    '';
+
     "ssh/sshd_config.d/my.conf".text = ''
       AllowUsers ubuntu
       # Reduce logspam

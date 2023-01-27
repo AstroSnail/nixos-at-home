@@ -9,10 +9,8 @@ modprobe_file_profile=/etc/modprobe.d/nixos.conf
 modprobe_file=/etc/modprobe.d/firewall.conf
 
 run_install () (
-  # save possibly pre-existing nftables config
-  if [ -e "${nftables_config}" ]
-  then mv "${nftables_config}" "${nftables_config_backup}"
-  fi
+  # save pre-existing nftables config
+  mv --no-target-directory "${nftables_config}" "${nftables_config_backup}"
   ln --symbolic --no-target-directory "${profile}${nftables_config}" "${nftables_config}"
   ln --symbolic --no-target-directory "${profile}${modprobe_file_profile}" "${modprobe_file}"
 )
@@ -23,10 +21,8 @@ run_remove () (
   set +o errexit
   rmlink "${modprobe_file}"
   rmlink "${nftables_config}"
-  # restore possibly pre-existing nftables config
-  if [ -e "${nftables_config_backup}" ]
-  then mv "${nftables_config_backup}" "${nftables_config}"
-  fi
+  # restore pre-existing nftables config
+  mv --no-target-directory "${nftables_config_backup}" "${nftables_config}"
 )
 
 "run_${command}" "$@"
