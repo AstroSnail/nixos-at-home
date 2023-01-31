@@ -16,7 +16,25 @@
       ENABLED=0
     '';
 
-    "ssh/sshd_config.d/my.conf".text = ''
+    "netplan/51-ipv6.yaml".text = ''
+      network:
+          version: 2
+          ethernets:
+              ens3:
+                  dhcp6: false
+                  match:
+                      macaddress: fa:16:3e:1f:10:ff
+                  addresses:
+                      - "2001:41d0:304:200::4150/128"
+                  gateway6: "2001:41d0:304:200::1"
+                  routes:
+                      - to: "2001:41d0:304:200::1"
+                        scope: "link"
+                      - to: "::/0"
+                        via: "2001:41d0:304:200::1"
+    '';
+
+    "ssh/sshd_config.d/99-my.conf".text = ''
       AllowUsers ubuntu
       # Reduce logspam
       LogLevel ERROR
@@ -25,7 +43,7 @@
       X11Forwarding no
     '';
 
-    "systemd/journald.conf.d/system-max-use.conf".text = ''
+    "systemd/journald.conf.d/00-system-max-use.conf".text = ''
       [Journal]
       SystemMaxUse=2G
     '';
