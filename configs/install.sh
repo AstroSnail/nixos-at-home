@@ -7,7 +7,7 @@ apt_periodic_file=/etc/apt/apt.conf.d/11periodic-edit
 apt_auto_upgrades_file=/etc/apt/apt.conf.d/21auto-upgrades-edit
 default_motd_news_file=/etc/default/motd-news
 default_motd_news_file_backup=/etc/default/motd-news.bak
-netplan_ipv6_file=/etc/netplan/51-ipv6.yaml
+#netplan_ipv6_file=/etc/netplan/51-ipv6.yaml
 sshd_config_file=/etc/ssh/sshd_config.d/99-my.conf
 journald_conf_dir=/etc/systemd/journald.conf.d
 journald_conf_file=/etc/systemd/journald.conf.d/00-system-max-use.conf
@@ -20,7 +20,7 @@ run_install () (
   mv --no-target-directory "${default_motd_news_file}" "${default_motd_news_file_backup}"
   ln --symbolic --no-target-directory "${profile}${default_motd_news_file}" "${default_motd_news_file}"
 
-  ln --symbolic --no-target-directory "${profile}${netplan_ipv6_file}" "${netplan_ipv6_file}"
+  #ln --symbolic --no-target-directory "${profile}${netplan_ipv6_file}" "${netplan_ipv6_file}"
   ln --symbolic --no-target-directory "${profile}${sshd_config_file}" "${sshd_config_file}"
 
   mkdir --parents "${journald_conf_dir}"
@@ -36,7 +36,7 @@ run_remove () (
   rmdir "${journald_conf_dir}"
 
   rmlink "${sshd_config_file}"
-  rmlink "${netplan_ipv6_file}"
+  #rmlink "${netplan_ipv6_file}"
 
   # restore pre-existing motd-news file
   rmlink "${default_motd_news_file}"
