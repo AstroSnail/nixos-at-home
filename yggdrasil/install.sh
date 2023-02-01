@@ -1,35 +1,21 @@
-# BEGIN install.sh
-
-command=${command:?"'command' variable missing!"}
 profile=${profile:?"'profile' variable missing!"}
+install_to=${install_to:?"'install_to' variable missing!"}
 
 service_file=/etc/systemd/system/yggdrasil.service
 service_link=/etc/systemd/system/multi-user.target.wants/yggdrasil.service
 service_relative=../yggdrasil.service
-service_requires_dir=/etc/systemd/system/yggdrasil.service.requires
 activation_file=/etc/systemd/system/yggdrasil-activation.service
 activation_link=/etc/systemd/system/yggdrasil.service.requires/yggdrasil-activation.service
 activation_relative=../yggdrasil-activation.service
 
-run_install () (
-  ln --symbolic --no-target-directory "${profile}${service_file}" "${service_file}"
-  ln --symbolic --no-target-directory "${service_relative}" "${service_link}"
-  ln --symbolic --no-target-directory "${profile}${activation_file}" "${activation_file}"
-  mkdir --parents "${service_requires_dir}"
-  ln --symbolic --no-target-directory "${activation_relative}" "${activation_link}"
-)
+linky () {
+  link_pointer=$1
+  link_name=$2
+  mkdir --parents "${link_name%/*}"
+  ln --symbolic --no-target-directory "${link_pointer}" "${link_name}"
+}
 
-run_remove () (
-  # keep trying to remove
-  # e.g. to remove a partially failed install
-  set +o errexit
-  rmlink "${activation_link}"
-  rmdir "${service_requires_dir}"
-  rmlink "${activation_file}"
-  rmlink "${service_link}"
-  rmlink "${service_file}"
-)
-
-"run_${command}" "$@"
-
-# END install.sh
+linky "${profile}${service_file}" "${install_to}${service_file}"
+linky "${service_relative}" "${install_to}${service_link}"
+linky "${profile}${activation_file}" "${install_to}${activation_file}"
+linky "${activation_relative}" "${install_to}${activation_link}"

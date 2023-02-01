@@ -30,8 +30,21 @@
   networking.wireguard.interfaces.wg_astro.ips = [ "fd57:337f:9040:1::5ea/64" ];
 
   installScript = let
-    interfaces = builtins.concatStringsSep " "
-      (builtins.attrNames config.networking.wireguard.interfaces);
+    iface-names = builtins.attrNames config.networking.wireguard.interfaces;
+    interfaces = builtins.concatStringsSep " " iface-names;
+    peers-of-iface = iface:
+      builtins.map (peer:
+        builtins.replaceStrings [ "+" "/" "=" ] [ "\\x2b" "-" "\\x3d" ]
+        peer.publicKey) config.networking.wireguard.interfaces.${iface}.peers;
+    one-iface2peers = iface:
+      "    (${iface}) peers='${
+            builtins.concatStringsSep " " (peers-of-iface iface)
+          }';;";
+    iface2peers =
+      builtins.concatStringsSep "\n" (builtins.map one-iface2peers iface-names);
     text = builtins.readFile ./install.sh;
-  in builtins.replaceStrings [ "###INTERFACES###" ] [ interfaces ] text;
+  in builtins.replaceStrings [ "###INTERFACES###" "###IFACE2PEERS###" ] [
+    interfaces
+    iface2peers
+  ] text;
 }
