@@ -1,0 +1,5 @@
+Architecture: all
+Description: service-nix-gc
+Maintainer: Erry <astrosnail@protonmail.com>
+Package: service-nix-gc
+Version: 0.1.0-1

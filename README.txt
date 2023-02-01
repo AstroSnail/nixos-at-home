@@ -47,3 +47,7 @@ Writing a service module yourself:
 Thanks:
 - Me :P
 - Nerath/lun* for help figuring out the profile-setting
+
+Useful other commands while installing:
+- sudo dpkg-divert --package service-firewall --divert /etc/nftables.conf.divert --rename --add /etc/nftables.conf
+- (and others like this)
