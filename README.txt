@@ -1,6 +1,7 @@
 Get NixOS services on a not-NixOS system
 (you still need nix though)
 (also requires that the system runs systemd)
+(also assumes the system uses dpkg but you can probably work around that)
 
 Overview:
 - You know how NixOS configuration is a module where you enable a bunch of
