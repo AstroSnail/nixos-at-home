@@ -12,7 +12,7 @@
   modules to create a system.
 - This system is a derivation, put into a profile somewhere and linked around
   the filesystem.
-- Remember that profiles are in `/nix/var/nix/profiles`.
+  - Remember that profiles are in `/nix/var/nix/profiles`.
 - What if you could control this last linking step? Carefully install only the
   services you want, without installing a whole NixOS system.
 - Basically this is what this is.
