@@ -57,8 +57,8 @@
 - :tada:
 
 ## Thanks:
-- [Me](/AstroSnail). :P
-- [Nerath/lun\*](/LunNova) for help figuring out the profile-setting.
+- [Me](https://github.com/AstroSnail). :P
+- [Nerath/lun\*](https://github.com/LunNova) for help figuring out the profile-setting.
 
 ## Useful other commands while installing:
 - `sudo dpkg-divert --package service-firewall --divert /etc/nftables.conf.divert --rename --add /etc/nftables.conf`
