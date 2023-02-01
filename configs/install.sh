@@ -5,7 +5,7 @@ apt_periodic_file=/etc/apt/apt.conf.d/11periodic-edit
 apt_auto_upgrades_file=/etc/apt/apt.conf.d/21auto-upgrades-edit
 default_motd_news_file=/etc/default/motd-news
 #netplan_ipv6_file=/etc/netplan/51-ipv6.yaml
-sshd_config_file=/etc/ssh/sshd_config.d/99-my.conf
+sshd_config_file=/etc/ssh/sshd_config.d/00-my.conf
 journald_conf_file=/etc/systemd/journald.conf.d/00-system-max-use.conf
 
 linky () {

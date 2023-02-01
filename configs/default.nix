@@ -34,7 +34,7 @@
                         via: "2001:41d0:304:200::1"
     '';
 
-    "ssh/sshd_config.d/99-my.conf".text = ''
+    "ssh/sshd_config.d/00-my.conf".text = ''
       AllowUsers ubuntu
       # Reduce logspam
       LogLevel ERROR
