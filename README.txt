@@ -21,15 +21,16 @@ Usage examples:
 - `nix run .#yggdrasil update` to add/update the yggdrasil service in the
   current user's profile directory.
 - `sudo nix run .#yggdrasil update` to do this on the root user's profile
-  directory. (this is necessary because packages [see later] link to the root
-  user's profile directory, but if you're not using the packages then do
-  whatever :p)
+  directory. (this is necessary because the packages [see next point] link to
+  the root user's profile directory, but if you're not using a package for a
+  particular module then you can link it to your own user's profile and figure
+  it out yourself)
 - `nix build .#package-yggdrasil` to get a Ubuntu package containing the
   symlinks, ready to install with the package manager.
 - `sudo nix run .#yggdrasil env <whatever>` to run nix-env on the profile.
 - `sudo nix run .#yggdrasil help` to see a summary of things you can do.
 - You'll need to manually start and stop the service,
-  e.g. `sudo systemctl start yggdrasil.service`
+  e.g. `sudo systemctl start yggdrasil.service` or reboot
 - Systemd will complain but probably won't do anything else when you remove
   the service files of a running service. But unless it's critical networking
   stuff you probably want to stop them first anyway.
@@ -38,10 +39,11 @@ Usage examples:
 Writing a service module yourself:
 - Good luck.
 - So the first step is to make a directory, say `foobar`.
-- Add a `foobar/default.nix` file containing the configuration module and an
-  `installScript` attribute containing the install script.
-- The install script is what creates the package.
-- Add it to the services in flake.nix (line 6 at this time).
+- Add a `foobar/default.nix` file containing the configuration module, a
+  `debianControl` attribute containing text for a Debian package control file,
+  and an `installScript` attribute containing the package install script to
+  create the package.
+- Add it to the services in flake.nix (under line 6 at this time).
 - :tada:
 
 Thanks:
@@ -50,4 +52,4 @@ Thanks:
 
 Useful other commands while installing:
 - sudo dpkg-divert --package service-firewall --divert /etc/nftables.conf.divert --rename --add /etc/nftables.conf
-- (and others like this)
+- sudo apt autoremove
