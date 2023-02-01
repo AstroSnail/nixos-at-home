@@ -5,7 +5,7 @@
 - Also assumes the system uses `dpkg` (Debian, Ubuntu, ...) but you can
   probably work around that.
 
-## Overview:
+## Overview
 - You know how a NixOS configuration is a module where you enable a bunch of
   services and whatever.
 - `nixos-rebuild` combines this configuration module with the rest of the NixOS
@@ -24,7 +24,7 @@
 - After installing a package, updates of the services are done on the profile,
   so reinstalling the package isn't necessary (unless there are new files).
 
-## Usage examples:
+## Usage examples
 - `nix run .#yggdrasil update` to add/update the yggdrasil service in the
   current user's profile directory.
 - `sudo nix run .#yggdrasil update` to do this on the root user's profile
@@ -46,7 +46,7 @@
   stuff you probably want to stop them first anyway.
 - Remember to restart the service after updates.
 
-## Writing a service module yourself:
+## Writing a service module yourself
 - Good luck.
 - Make a directory, say `foobar`.
 - Add a `foobar/default.nix` file containing the configuration module, a
@@ -56,11 +56,11 @@
 - Add `"foobar"` to the services in `flake.nix` (under line 6 at this time).
 - :tada:
 
-## Thanks:
+## Thanks
 - [Me](https://github.com/AstroSnail). :P
 - [Nerath/lun\*](https://github.com/LunNova) for help figuring out the profile-setting.
 
-## Useful other commands while installing:
+## Other useful commands
 - `sudo dpkg-divert --package service-firewall --divert /etc/nftables.conf.divert --rename --add /etc/nftables.conf`
   - The `firewall` service here interferes with `nftables` in Ubuntu, but the
     existing nftables service is valuable so, instead of specifying a conflict
