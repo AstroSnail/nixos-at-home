@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "--with-randomdev=/dev/random"
     "--with-ecdsa"
     "--with-gost"
-    "--without-eddsa"
+    "--with-eddsa"
     "--with-aes"
   ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
     ++ lib.optional enableSeccomp "--enable-seccomp"
