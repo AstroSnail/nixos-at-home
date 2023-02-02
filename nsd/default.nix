@@ -37,10 +37,11 @@ in {
     description = "NSD remote control setup";
     before = [ "nsd.service" ];
     wantedBy = [ "nsd.service" ];
-    serviceConfig = {
-      ExecStart = "${nsdPkg}/sbin/nsd-control-setup -d /etc/nsd";
-      Type = "oneshot";
-    };
+    script = ''
+      mkdir --parents /etc/nsd
+      ${nsdPkg}/sbin/nsd-control-setup -d /etc/nsd
+    '';
+    serviceConfig.Type = "oneshot";
   };
 
   debianControl = builtins.readFile ./control.txt;
