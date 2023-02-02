@@ -43,7 +43,7 @@ in {
   };
 
   systemd.services.nsd-dnssec.postStop =
-    lib.mkForce "${nsdPkg}/sbin/nsd-control -c ${nsdEnv}/nsd.conf";
+    lib.mkForce "${nsdPkg}/sbin/nsd-control -c ${nsdEnv}/nsd.conf reload";
 
   nixpkgs.overlays =
     [ (self: super: { bind = pkgs.callPackage ./bind.nix { }; }) ];
