@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   nsdPkg =
@@ -37,6 +37,7 @@ in {
     description = "NSD remote control setup";
     before = [ "nsd.service" ];
     wantedBy = [ "nsd.service" ];
+    path = [ pkgs.openssl ];
     script = ''
       mkdir --parents /etc/nsd
       ${nsdPkg}/sbin/nsd-control-setup -d /etc/nsd
