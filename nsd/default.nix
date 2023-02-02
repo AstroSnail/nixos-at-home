@@ -8,7 +8,12 @@ let
 
 in {
   services.nsd.enable = true;
-  #services.nsd.interfaces = [ ];
+  services.nsd.interfaces = [
+    "146.59.231.219"
+    "2001:41d0:304:200::4150"
+    "207:f201:452c:4b9b:64a7:8afe:4620:1ede"
+    "fd57:337f:9040:1::5ea"
+  ];
   services.nsd.identity = config.networking.fqdnOrHostName;
   services.nsd.nsid = "ascii_" + config.networking.fqdnOrHostName;
   #services.nsd.serverCount = 1;
