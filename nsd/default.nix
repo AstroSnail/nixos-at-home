@@ -30,9 +30,6 @@ in {
     dnssecPolicy.zsk.postPublish = "1w";
   };
 
-  systemd.services.nsd-dnssec.postStop =
-    lib.mkForce "${nsdPkg}/sbin/nsd-control -c ${nsdEnv}/nsd.conf";
-
   systemd.services.nsd-control-setup = {
     description = "NSD remote control setup";
     before = [ "nsd.service" ];
@@ -44,6 +41,12 @@ in {
     '';
     serviceConfig.Type = "oneshot";
   };
+
+  systemd.services.nsd-dnssec.postStop =
+    lib.mkForce "${nsdPkg}/sbin/nsd-control -c ${nsdEnv}/nsd.conf";
+
+  nixpkgs.overlays =
+    [ (self: super: { bind = pkgs.callPackage ./bind.nix { }; }) ];
 
   debianControl = builtins.readFile ./control.txt;
   installScript = builtins.readFile ./install.sh;
