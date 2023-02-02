@@ -47,8 +47,10 @@ in {
     serviceConfig.Type = "oneshot";
   };
 
-  systemd.services.nsd-dnssec.postStop =
-    lib.mkForce "${nsdPkg}/sbin/nsd-control -c ${nsdEnv}/nsd.conf reload";
+  systemd.services.nsd-dnssec = {
+    postStop = lib.mkForce "${nsdPkg}/sbin/nsd-control -c ${nsdEnv}/nsd.conf reload";
+    serviceConfig.WorkingDirectory = "/var/lib/nsd/zones";
+  };
 
   nixpkgs.overlays = [
     (self: super: {
