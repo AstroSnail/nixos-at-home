@@ -45,8 +45,11 @@ in {
   systemd.services.nsd-dnssec.postStop =
     lib.mkForce "${nsdPkg}/sbin/nsd-control -c ${nsdEnv}/nsd.conf reload";
 
-  nixpkgs.overlays =
-    [ (self: super: { bind = pkgs.callPackage ./bind.nix { }; }) ];
+  nixpkgs.overlays = [
+    (self: super: {
+      bind = self.callPackage ./bind.nix { python3 = self.python39; };
+    })
+  ];
 
   debianControl = builtins.readFile ./control.txt;
   installScript = builtins.readFile ./install.sh;
