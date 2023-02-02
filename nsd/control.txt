@@ -1,0 +1,5 @@
+Architecture: all
+Description: service-nsd
+Maintainer: Erry <astrosnail@protonmail.com>
+Package: service-nsd
+Version: 0.1.0-1

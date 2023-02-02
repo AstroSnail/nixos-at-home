@@ -7,6 +7,7 @@
         "configs"
         "firewall"
         "nix-gc"
+        "nsd"
         "ubuntu-advantage-tools-stub"
         "wireguard"
         "yggdrasil"

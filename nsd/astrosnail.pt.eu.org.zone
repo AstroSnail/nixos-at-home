@@ -1,0 +1,22 @@
+$ORIGIN astrosnail.pt.eu.org.
+$TTL 1d
+
+;                                          SERIAL REFRESH RETRY EXPIRE MINIMUM
+@     SOA   ns1 astrosnail.protonmail.com. 1      2h      1h    2w     1h
+      NS    ns1
+      NS    ns2
+;     CAA   128 issue     "letsencrypt.org"
+;     CAA   128 issuewild "letsencrypt.org"
+;     CAA     0 iodef     "mailto:astrosnail@protonmail.com"
+      AAAA  2001:41d0:304:200::4150
+      A     146.59.231.219
+
+ns1   AAAA  2001:41d0:304:200::4150
+      A     146.59.231.219
+ns2   AAAA  2001:41d0:304:200::4150
+      A     146.59.231.219
+
+soon  AAAA  2001:818:df73:f400::abba:cad:abba
+      A     94.60.30.250
+sea   AAAA  2001:41d0:304:200::4150
+      A     146.59.231.219
