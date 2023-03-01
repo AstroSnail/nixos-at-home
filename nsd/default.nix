@@ -24,8 +24,7 @@ in {
   services.nsd.zones."astrosnail.pt.eu.org." = {
     data = builtins.readFile ./astrosnail.pt.eu.org.zone;
     dnssec = true;
-    #dnssecPolicy.algorithm = "ED25519";
-    dnssecPolicy.algorithm = "ECDSAP256SHA256";
+    dnssecPolicy.algorithm = "ED25519";
     dnssecPolicy.ksk.keySize = 256;
     dnssecPolicy.ksk.rollPeriod = "1y";
     dnssecPolicy.ksk.prePublish = "1mo";
