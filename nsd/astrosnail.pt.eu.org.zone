@@ -1,23 +1,45 @@
 $ORIGIN astrosnail.pt.eu.org.
 $TTL 1d
 
-;                                          SERIAL REFRESH RETRY EXPIRE MINIMUM
-@     SOA   ns1 astrosnail.protonmail.com. 1      2h      1h    2w     1h
-      NS    ns1
-      NS    ns2
-      AAAA  2001:41d0:304:200::4150
-      A     146.59.231.219
-;     CAA   128 issue     "letsencrypt.org"
-;     CAA   128 issuewild "letsencrypt.org"
-;     CAA     0 iodef     "mailto:astrosnail@protonmail.com"
-      TXT   "keybase-site-verification=HNPj0etgb3YWy5gfHR9xtMucE44Lh5siUnf4UdQY45g"
+;                                           SERIAL REFRESH RETRY EXPIRE MINIMUM
+@      SOA   ns1 astrosnail.protonmail.com. 1      2h      1h    2w     1h
+       NS    ns1
+       NS    ns2
+       ; this is `sea`
+       AAAA  2001:41d0:304:200::4150
+       A     146.59.231.219
 
-ns1   AAAA  2001:41d0:304:200::4150
-      A     146.59.231.219
-ns2   AAAA  2001:41d0:304:200::4150
-      A     146.59.231.219
+       CAA   128 issue     "letsencrypt.org"
+       CAA   128 issuewild "letsencrypt.org"
+       CAA     0 iodef     "mailto:astrosnail@protonmail.com"
 
-soon  AAAA  2001:818:df73:f400::abba:cad:abba
-      A     94.60.30.250
-sea   AAAA  2001:41d0:304:200::4150
-      A     146.59.231.219
+       TXT   "keybase-site-verification=HNPj0etgb3YWy5gfHR9xtMucE44Lh5siUnf4UdQY45g"
+
+       ; this is `sea` twice
+ns1    AAAA  2001:41d0:304:200::4150
+       A     146.59.231.219
+ns2    AAAA  2001:41d0:304:200::4150
+       A     146.59.231.219
+
+; hosts
+       ; `snail` is out of commission :<
+;snail AAAA  2001:818:df73:f400:c0ff:eeba:d7ea:900d
+;      A     94.60.30.250
+soon   AAAA  2001:818:df73:f400::abba:cad:abba
+       A     94.60.30.250
+sea    AAAA  2001:41d0:304:200::4150
+       A     146.59.231.219
+
+; subdomains
+;bin       CNAME  snail
+;blog      CNAME  snail
+;click     CNAME  snail
+;css       CNAME  snail
+;git       CNAME  snail
+;green     CNAME  snail
+;minetest  CNAME  snail
+;webgl     CNAME  snail
+;www       CNAME  snail
+
+; funny
+so-you-thought-you-could-just-have-a-subdomain-for-yourself-huh.you-wanted-to-show-the-whole-world-that-you-can-just-ask-for-it.well-let-me-teach-you-a-little-something-from-round-these-parts.one-does-not-simply-get-a-subdomain-from.astrosnail.pt.eu.org.  CNAME  juhu.is.not.malic.ee. ;juhu.internet-box.ch.
