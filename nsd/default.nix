@@ -48,6 +48,8 @@ in {
   };
 
   systemd.services.nsd-dnssec = {
+    after = [ "nsd.service" ];
+    before = lib.mkForce [ ];
     postStop =
       lib.mkForce "${nsdPkg}/sbin/nsd-control -c ${nsdEnv}/nsd.conf reload";
     serviceConfig = {
