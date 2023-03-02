@@ -5,11 +5,12 @@ $TTL 1d
 @     SOA   ns1 astrosnail.protonmail.com. 1      2h      1h    2w     1h
       NS    ns1
       NS    ns2
+      AAAA  2001:41d0:304:200::4150
+      A     146.59.231.219
 ;     CAA   128 issue     "letsencrypt.org"
 ;     CAA   128 issuewild "letsencrypt.org"
 ;     CAA     0 iodef     "mailto:astrosnail@protonmail.com"
-      AAAA  2001:41d0:304:200::4150
-      A     146.59.231.219
+      TXT   "keybase-site-verification=HNPj0etgb3YWy5gfHR9xtMucE44Lh5siUnf4UdQY45g"
 
 ns1   AAAA  2001:41d0:304:200::4150
       A     146.59.231.219
