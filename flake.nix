@@ -8,6 +8,7 @@
         "firewall"
         "nix-gc"
         "nsd"
+        "powerdns"
         "ubuntu-advantage-tools-stub"
         "wireguard"
         "yggdrasil"

@@ -1,0 +1,5 @@
+Architecture: all
+Description: service-powerdns
+Maintainer: Erry <astrosnail@protonmail.com>
+Package: service-powerdns
+Version: 0.1.0-1
