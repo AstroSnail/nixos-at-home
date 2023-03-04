@@ -1,3 +1,5 @@
+{ lib, ... }:
+
 {
   environment.etc = {
 
@@ -50,6 +52,6 @@
 
   };
 
-  debianControl = builtins.readFile ./control.txt;
-  installScript = builtins.readFile ./install.sh;
+  debianControl = lib.readFile ./control.txt;
+  installScript = lib.readFile ./install.sh;
 }

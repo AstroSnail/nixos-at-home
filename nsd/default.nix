@@ -2,9 +2,9 @@
 
 let
   nsdPkg =
-    builtins.substring 0 53 config.systemd.services.nsd.serviceConfig.ExecStart;
-  nsdEnv = builtins.substring 69 51
-    config.systemd.services.nsd.serviceConfig.ExecStart;
+    lib.substring 0 53 config.systemd.services.nsd.serviceConfig.ExecStart;
+  nsdEnv =
+    lib.substring 69 51 config.systemd.services.nsd.serviceConfig.ExecStart;
 
 in {
   services.nsd.enable = true;
@@ -22,7 +22,7 @@ in {
   services.nsd.ratelimit.enable = true;
   services.nsd.remoteControl.enable = true;
   services.nsd.zones."astrosnail.pt.eu.org." = {
-    data = builtins.readFile ./astrosnail.pt.eu.org.zone;
+    data = lib.readFile ./astrosnail.pt.eu.org.zone;
     dnssec = true;
     dnssecPolicy.algorithm = "ED25519";
     dnssecPolicy.ksk.keySize = 256;
@@ -64,6 +64,6 @@ in {
     })
   ];
 
-  debianControl = builtins.readFile ./control.txt;
-  installScript = builtins.readFile ./install.sh;
+  debianControl = lib.readFile ./control.txt;
+  installScript = lib.readFile ./install.sh;
 }

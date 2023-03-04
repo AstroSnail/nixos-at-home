@@ -1,4 +1,6 @@
+{ lib, ... }:
+
 {
-  debianControl = builtins.readFile ./control.txt;
+  debianControl = lib.readFile ./control.txt;
   installScript = "";
 }

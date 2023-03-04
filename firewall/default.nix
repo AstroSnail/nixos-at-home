@@ -14,6 +14,6 @@
   environment.etc."nftables.conf".source =
     config.systemd.services.nftables.serviceConfig.ExecStart;
 
-  debianControl = builtins.readFile ./control.txt;
-  installScript = builtins.readFile ./install.sh;
+  debianControl = lib.readFile ./control.txt;
+  installScript = lib.readFile ./install.sh;
 }

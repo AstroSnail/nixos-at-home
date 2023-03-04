@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   services.yggdrasil.enable = true;
@@ -18,6 +18,6 @@
     serviceConfig.Type = "oneshot";
   };
 
-  debianControl = builtins.readFile ./control.txt;
-  installScript = builtins.readFile ./install.sh;
+  debianControl = lib.readFile ./control.txt;
+  installScript = lib.readFile ./install.sh;
 }

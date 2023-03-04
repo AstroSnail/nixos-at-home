@@ -17,8 +17,9 @@
       forAllSystems = lib.genAttrs supportedSystems;
       forAllServices = lib.genAttrs services;
       # does there not exist a concat-map for attribute sets?
+      # there exists lib.concatMapAttrs but i want to take a set, not attrset
       forAllServicesFlat = f:
-        builtins.foldl' (l: r: l // r) { } (builtins.map f services);
+        lib.foldl lib.trivial.mergeAttrs { } (builtins.map f services);
     in {
 
       apps = forAllSystems (system:
@@ -54,7 +55,7 @@
               text = ''
                 name=${name}
                 derivation=${selfpkgs."system-${name}"}
-              '' + (builtins.readFile "${self}/profile.sh");
+              '' + (lib.readFile "${self}/profile.sh");
             };
 
             "control-${name}" =
@@ -71,7 +72,7 @@
                 name=${name}
                 control=${selfpkgs."control-${name}"}
                 install=${selfpkgs."install-${name}"}/bin/${name}
-              '' + (builtins.readFile "${self}/packager.sh");
+              '' + (lib.readFile "${self}/packager.sh");
             };
 
             "package-${name}" = pkgs.runCommand "package-${name}" { } ''

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 {
   networking.wireguard.interfaces.wg_astro = {
@@ -30,28 +30,27 @@
     ips = [ "fd57:337f:9040:1::5ea/64" ];
   };
 
-  debianControl = builtins.readFile ./control.txt;
+  debianControl = lib.readFile ./control.txt;
 
   installScript = let
 
-    interfaces = builtins.attrNames config.networking.wireguard.interfaces;
-    interfaces-str = builtins.concatStringsSep " " interfaces;
+    interfaces = lib.attrNames config.networking.wireguard.interfaces;
+    interfaces-str = lib.concatStringsSep " " interfaces;
 
     peers-of-iface = iface:
       builtins.map (peer:
-        builtins.replaceStrings [ "+" "/" "=" ] [ "\\x2b" "-" "\\x3d" ]
+        lib.replaceStrings [ "+" "/" "=" ] [ "\\x2b" "-" "\\x3d" ]
         peer.publicKey) config.networking.wireguard.interfaces.${iface}.peers;
-    peers-of-iface-str = iface:
-      builtins.concatStringsSep " " (peers-of-iface iface);
+    peers-of-iface-str = iface: lib.concatStringsSep " " (peers-of-iface iface);
 
     iface2peers = builtins.map
       (iface: "    (${iface}) peers='${peers-of-iface-str iface}';;")
       interfaces;
-    iface2peers-str = builtins.concatStringsSep "\n" iface2peers;
+    iface2peers-str = lib.concatStringsSep "\n" iface2peers;
 
-    text = builtins.readFile ./install.sh;
+    text = lib.readFile ./install.sh;
 
-  in builtins.replaceStrings [ "###INTERFACES###" "###IFACE2PEERS###" ] [
+  in lib.replaceStrings [ "###INTERFACES###" "###IFACE2PEERS###" ] [
     interfaces-str
     iface2peers-str
   ] text;
