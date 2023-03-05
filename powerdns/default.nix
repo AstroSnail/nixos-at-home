@@ -1,13 +1,12 @@
 { config, lib, pkgs, ... }:
 
 let
-  sea-ipv4 = "146.59.231.219";
-  sea-ipv6 = "[2001:41d0:304:200::4150]";
-
+  zone-file = pkgs.writeText "astrosnail.pt.eu.org.zone"
+    (import ./astrosnail.pt.eu.org.zone.nix { inherit config; });
   bind-config = pkgs.writeText "named.conf" ''
     zone "astrosnail.pt.eu.org" {
       type native;
-      file "${./astrosnail.pt.eu.org.zone}";
+      file "${zone-file}";
     };
   '';
 
@@ -30,7 +29,12 @@ in {
   services.powerdns.extraConfig = to-pdns-config {
     # zero addresses are already being used
     # (is it systemd 127.0.0.53%lo???)
-    local-address = [ sea-ipv4 sea-ipv6 ];
+    local-address = [
+      "${config.ips.sea-ipv4}"
+      "[${config.ips.sea-ipv6}]"
+      "[${config.ips.sea-yggd}]"
+      "[${config.ips.sea-wg}]"
+    ];
     # alias is incompatible with live-signing
     #expand-alias = true;
     #resolver = "127.0.0.53";

@@ -8,26 +8,26 @@
     peers = [
       { # soon
         publicKey = "Rc7Ft6ljK9pyRmrwzQmfsIEIpqsTpCu+1hlAaTfDyzc=";
-        allowedIPs = [ "fd57:337f:9040:1:2:3:4:5/128" ];
-        endpoint = "[200:677f:abc:380b:6c78:73b5:c72e:c1f3]:51820";
+        allowedIPs = [ "${config.ips.soon-wg}/128" ];
+        endpoint = "[${config.ips.soon-yggd}]:51820";
       }
       { # smol
         publicKey = "Lp5hmSdapd8LPYpdLb2+8eBKq3mV6PO7gi2VIVv3d2s=";
-        allowedIPs = [ "fd57:337f:9040:1:1:1:1:2/128" ];
-        #endpoint = "[]:51820";
+        allowedIPs = [ "${config.ips.smol-wg}/128" ];
+        #endpoint = "[${config.ips.smol-yggd}]:51820";
       }
       { # sonar
         publicKey = "spQBkQX/+mB1MmVvDnjs1IEHInDKOxPMjhgs0OyJCi8=";
-        allowedIPs = [ "fd57:337f:9040:1:9ca7:9ca7:9ca7:9ca7/128" ];
-        #endpoint = "[202:2d0d:edc4:38af:ccb9:efb6:59de:421d]:51820";
+        allowedIPs = [ "${config.ips.sonar-wg}/128" ];
+        #endpoint = "[${config.ips.sonar-yggd}]:51820";
       }
       { # soon-prime
         publicKey = "q9Pmyalgp+Qt2NU3ewng0WW7lfFIjEEMExWqHg5CVV0=";
-        allowedIPs = [ "fd57:337f:9040:1:5:4:3:2/128" ];
-        endpoint = "[200:2ab6:23c:e13c:5902:4bbc:4afe:509c]:51820";
+        allowedIPs = [ "${config.ips.soon-prime-wg}/128" ];
+        endpoint = "[${config.ips.soon-prime-yggd}]:51820";
       }
     ];
-    ips = [ "fd57:337f:9040:1::5ea/64" ];
+    ips = [ "${config.ips.sea-wg}/64" ];
   };
 
   debianControl = lib.readFile ./control.txt;
