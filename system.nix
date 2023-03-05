@@ -20,7 +20,7 @@ in {
   # useful data
   options.ips = lib.mkOption { type = t.lazyAttrsOf t.str; };
   config.ips = {
-    snail-ipv4 = "94.60.30.250";
+    #snail-ipv4 = "94.60.30.250";
     snail-ipv6 = "2001:818:df73:f400:c0ff:eeba:d7ea:900d";
     #snail-yggd = "";
     #snail-wg = "";

@@ -15,8 +15,7 @@
             AAAA   ${config.ips.sea-ipv6}
 
   ; hosts
-  snail     A      ${config.ips.snail-ipv4}
-            AAAA   ${config.ips.snail-ipv6}
+  snail     AAAA   ${config.ips.snail-ipv6}
   soon      A      ${config.ips.soon-ipv4}
             AAAA   ${config.ips.soon-ipv6}
   sea       A      ${config.ips.sea-ipv4}
