@@ -1,7 +1,10 @@
 After installing and starting, this service needs additional configuration.
-Eliding boilerplate like sudo -u pdns $(command -v pdnsutil) --config-dir=...
-- pdnsutil secure-zone astrosnail.pt.eu.org
-- pdnsutil set-nsec3 astrosnail.pt.eu.org '1 0 0 -' narrow
-- pdnsutil rectify-all-zones
+After installing and starting, maintenance has to be done manually.
+Useful commands are below (eliding boilerplate like
+`sudo -u pdns $(command -v pdnsutil) --config-dir=...`)
+- # getting ds records to add to parent zone
 - pdnsutil export-zone-ds astrosnail.pt.eu.org
-TODO: dnssec key rollovers
+- # updating zone with new records
+- # TODO: delete records?
+- pdnsutil load-zone astrosnail.pt.eu.org ...zonefile
+- # TODO: dnssec key rollovers

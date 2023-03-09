@@ -3,12 +3,12 @@
 let
   zone-file = pkgs.writeText "astrosnail.pt.eu.org.zone"
     (import ./astrosnail.pt.eu.org.zone.nix { inherit config; });
-  bind-config = pkgs.writeText "named.conf" ''
-    zone "astrosnail.pt.eu.org" {
-      type native;
-      file "${zone-file}";
-    };
-  '';
+  #bind-config = pkgs.writeText "named.conf" ''
+  #  zone "astrosnail.pt.eu.org" {
+  #    type native;
+  #    file "${zone-file}";
+  #  };
+  #'';
 
   # this is a very cheap config-generator
   # properly made, it should be a module with options
@@ -30,6 +30,7 @@ in {
     # zero addresses are already being used
     # (is it systemd 127.0.0.53%lo???)
     local-address = [
+      "127.0.0.1"
       "${config.ips.sea-ipv4}"
       "[${config.ips.sea-ipv6}]"
       "[${config.ips.sea-yggd}]"
@@ -44,14 +45,15 @@ in {
     # rfc2136
     dnsupdate = true;
     # bind-hybrid requires disabling zone cache
-    zone-cache-refresh-interval = 0;
+    #zone-cache-refresh-interval = 0;
     # other
     reuseport = true;
     server-id = config.networking.fqdnOrHostName;
 
-    launch = [ "bind" "gsqlite3" ];
-    bind-config = bind-config;
-    bind-hybrid = true;
+    #launch = [ "bind" "gsqlite3" ];
+    #bind-config = bind-config;
+    #bind-hybrid = true;
+    launch = [ "gsqlite3" ];
     gsqlite3-database = "/var/lib/pdns/gsqlite3.sqlite";
     gsqlite3-pragma-synchronous = false;
     gsqlite3-dnssec = true;
@@ -61,13 +63,19 @@ in {
     description = "PowerDNS SQLite3 database setup";
     before = [ "pdns.service" ];
     wantedBy = [ "pdns.service" ];
-    path = [ pkgs.sqlite ];
-    unitConfig.ConditionPathExists = "!/var/lib/pdns";
-    script = ''
+    path = [ pkgs.powerdns pkgs.sqlite ];
+    unitConfig.ConditionPathExists = "!/var/lib/pdns/gsqlite3.sqlite";
+    script = let
+      configDir = pkgs.writeTextDir "pdns.conf" "${config.services.powerdns.extraConfig}";
+    in ''
       mkdir --parents /var/lib/pdns
-      sqlite3 -init ${./sqlite-init.txt} /var/lib/pdns/gsqlite3.sqlite
-      sqlite3 /var/lib/pdns/gsqlite3.sqlite "insert into domains (name, type) values ('astrosnail.pt.eu.org', 'NATIVE');"
       chmod go-rwx /var/lib/pdns
+      sqlite3 -init ${./sqlite-init.txt} /var/lib/pdns/gsqlite3.sqlite
+      #sqlite3 /var/lib/pdns/gsqlite3.sqlite "insert into domains (name, type) values ('astrosnail.pt.eu.org', 'NATIVE');"
+      pdnsutil --config-dir=${configDir} load-zone astrosnail.pt.eu.org ${zone-file}
+      pdnsutil --config-dir=${configDir} secure-zone astrosnail.pt.eu.org
+      pdnsutil --config-dir=${configDir} set-nsec3 astrosnail.pt.eu.org '1 0 0 -' narrow
+      pdnsutil --config-dir=${configDir} rectify-all-zones
       chown --recursive pdns: /var/lib/pdns
     '';
     serviceConfig.Type = "oneshot";

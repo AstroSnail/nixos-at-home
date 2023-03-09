@@ -4,6 +4,7 @@
   outputs = { self, nixpkgs }:
     let
       services = [
+        "acme"
         "configs"
         "firewall"
         "nix-gc"
