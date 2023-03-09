@@ -30,7 +30,13 @@
     ips = [ "${config.ips.sea-wg}/64" ];
   };
 
-  debianControl = lib.readFile ./control.txt;
+  debianControl = ''
+    Architecture: all
+    Description: service-wireguard
+    Maintainer: Erry <astrosnail@protonmail.com>
+    Package: service-wireguard
+    Version: 0.1.0-1
+  '';
 
   installScript = let
 

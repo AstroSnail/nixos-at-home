@@ -14,6 +14,13 @@
   environment.etc."nftables.conf".source =
     config.systemd.services.nftables.serviceConfig.ExecStart;
 
-  debianControl = lib.readFile ./control.txt;
+  debianControl = ''
+    Architecture: all
+    Description: service-firewall
+    Maintainer: Erry <astrosnail@protonmail.com>
+    Package: service-firewall
+    Version: 0.1.0-1
+  '';
+
   installScript = lib.readFile ./install.sh;
 }

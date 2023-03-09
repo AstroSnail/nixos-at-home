@@ -66,7 +66,8 @@ in {
     path = [ pkgs.powerdns pkgs.sqlite ];
     unitConfig.ConditionPathExists = "!/var/lib/pdns/gsqlite3.sqlite";
     script = let
-      configDir = pkgs.writeTextDir "pdns.conf" "${config.services.powerdns.extraConfig}";
+      configDir =
+        pkgs.writeTextDir "pdns.conf" "${config.services.powerdns.extraConfig}";
     in ''
       mkdir --parents /var/lib/pdns
       chmod go-rwx /var/lib/pdns
@@ -81,6 +82,13 @@ in {
     serviceConfig.Type = "oneshot";
   };
 
-  debianControl = lib.readFile ./control.txt;
+  debianControl = ''
+    Architecture: all
+    Description: service-powerdns
+    Maintainer: Erry <astrosnail@protonmail.com>
+    Package: service-powerdns
+    Version: 0.1.0-1
+  '';
+
   installScript = lib.readFile ./install.sh;
 }

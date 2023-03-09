@@ -18,6 +18,13 @@
     serviceConfig.Type = "oneshot";
   };
 
-  debianControl = lib.readFile ./control.txt;
+  debianControl = ''
+    Architecture: all
+    Description: service-yggdrasil
+    Maintainer: Erry <astrosnail@protonmail.com>
+    Package: service-yggdrasil
+    Version: 0.1.0-1
+  '';
+
   installScript = lib.readFile ./install.sh;
 }

@@ -52,6 +52,16 @@
 
   };
 
-  debianControl = lib.readFile ./control.txt;
+  debianControl = ''
+    Architecture: all
+    Description: service-configs
+    Maintainer: Erry <astrosnail@protonmail.com>
+    Package: service-configs
+    Version: 0.1.0-1
+    Provides: motd-news-config
+    Conflicts: motd-news-config
+    Replaces: motd-news-config
+  '';
+
   installScript = lib.readFile ./install.sh;
 }

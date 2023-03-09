@@ -6,6 +6,13 @@
   nix.gc.randomizedDelaySec = "45min";
   nix.gc.options = "--delete-old";
 
-  debianControl = lib.readFile ./control.txt;
+  debianControl = ''
+    Architecture: all
+    Description: service-nix-gc
+    Maintainer: Erry <astrosnail@protonmail.com>
+    Package: service-nix-gc
+    Version: 0.1.0-1
+  '';
+
   installScript = lib.readFile ./install.sh;
 }
