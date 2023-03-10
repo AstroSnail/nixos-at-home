@@ -5,6 +5,7 @@ service_file=/etc/systemd/system/pdns.service
 service_override=/etc/systemd/system/pdns.service.d/overrides.conf
 service_link=/etc/systemd/system/multi-user.target.wants/pdns.service
 database_setup_file=/etc/systemd/system/pdns-sqlite3-setup.service
+update_zone_file=/etc/systemd/system/pdns-update-zone.service
 
 linky () {
   link_pointer=$1
@@ -22,6 +23,7 @@ linky "${profile}${service_file}" "${install_to}${service_file}"
 linky "${profile}${service_override}" "${install_to}${service_override}"
 linky_relative "${install_to}${service_link}"
 linky "${profile}${database_setup_file}" "${install_to}${database_setup_file}"
+linky "${profile}${update_zone_file}" "${install_to}${update_zone_file}"
 
 cat >"${install_to}/DEBIAN/postinst" <<-'EOF'
 	#!/bin/sh
