@@ -5,5 +5,5 @@ Useful commands are below (eliding boilerplate like
 - # getting ds records to add to parent zone
 - pdnsutil export-zone-ds astrosnail.pt.eu.org
 - # updating zone records
-- pdnsutil load-zone astrosnail.pt.eu.org ...zonefile
+- systemctl start pdns-update-zone.service
 - # TODO: dnssec key rollovers
