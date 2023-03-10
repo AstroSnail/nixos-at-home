@@ -24,7 +24,8 @@ let
     (lib.concatStringsSep "\n")
   ];
 
-  configDir = pkgs.writeTextDir "pdns.conf" "${config.services.powerdns.extraConfig}";
+  configDir =
+    pkgs.writeTextDir "pdns.conf" "${config.services.powerdns.extraConfig}";
 
 in {
   services.powerdns.enable = true;
