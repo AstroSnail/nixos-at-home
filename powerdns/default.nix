@@ -61,10 +61,11 @@ in {
     gsqlite3-dnssec = true;
   };
 
+  systemd.services.pdns.wants = [ "pdns-sqlite3-setup.service" ];
+
   systemd.services.pdns-sqlite3-setup = {
     description = "PowerDNS SQLite3 database setup";
     before = [ "pdns.service" ];
-    wantedBy = [ "pdns.service" ];
     path = [ pkgs.powerdns pkgs.sqlite ];
     unitConfig.ConditionPathExists = "!/var/lib/pdns/gsqlite3.sqlite";
     serviceConfig.Type = "oneshot";

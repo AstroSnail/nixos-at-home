@@ -10,10 +10,11 @@
     Peers = [ "tcp://[${config.ips.soon-ipv6}]:123" ];
   };
 
+  systemd.services.yggdrasil.requires = [ "yggdrasil-activation.service" ];
+
   systemd.services.yggdrasil-activation = {
     description = "Activation script for yggdrasil";
     before = [ "yggdrasil.service" ];
-    requiredBy = [ "yggdrasil.service" ];
     script = config.system.activationScripts.yggdrasil;
     serviceConfig.Type = "oneshot";
   };
