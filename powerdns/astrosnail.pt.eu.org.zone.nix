@@ -33,9 +33,10 @@
   www       CNAME  snail
 
   ; info
-  @         CAA    128 issue     "letsencrypt.org"
-            CAA    128 issuewild "letsencrypt.org"
-            CAA      0 iodef     "mailto:astrosnail@protonmail.com"
+  @         CAA    128 issue        "letsencrypt.org"
+            CAA    128 issuewild    "letsencrypt.org"
+            CAA      0 iodef        "mailto:astrosnail@protonmail.com"
+            CAA      0 contactemail "astrosnail@protonmail.com"
             TXT    "keybase-site-verification=HNPj0etgb3YWy5gfHR9xtMucE44Lh5siUnf4UdQY45g"
   _ens      TXT    "a=0x4650264Dd8Fb4e32A88168E6206e0779D11800c7"
 
