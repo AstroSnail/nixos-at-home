@@ -10,7 +10,7 @@
   #security.acme.defaults.reloadServices = [ ];
   security.acme.certs.astrosnail.domain = "astrosnail.pt.eu.org";
   security.acme.certs.astrosnail.extraDomainNames =
-    [ "*.astrosnail.pt.eu.org" ];
+    [ config.ips.sea-ipv4 config.ips.sea-ipv6 "*.astrosnail.pt.eu.org" ];
 
   debianControl = ''
     Architecture: all
