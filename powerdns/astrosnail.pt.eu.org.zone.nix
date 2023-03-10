@@ -33,8 +33,8 @@
   www       CNAME  snail
 
   ; info
-  @         CAA    128 issue        "letsencrypt.org"
-            CAA    128 issuewild    "letsencrypt.org"
+  @         CAA    128 issue        "letsencrypt.org; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1001995317; validationmethods=dns-01"
+            CAA    128 issuewild    "letsencrypt.org; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1001995317; validationmethods=dns-01"
             CAA      0 iodef        "mailto:astrosnail@protonmail.com"
             CAA      0 contactemail "astrosnail@protonmail.com"
             TXT    "keybase-site-verification=HNPj0etgb3YWy5gfHR9xtMucE44Lh5siUnf4UdQY45g"
