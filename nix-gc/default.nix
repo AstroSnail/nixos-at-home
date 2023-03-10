@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 {
   nix.gc.automatic = true;
@@ -9,7 +9,7 @@
   debianControl = ''
     Architecture: all
     Description: service-nix-gc
-    Maintainer: Erry <astrosnail@protonmail.com>
+    Maintainer: Erry <${config.email}>
     Package: service-nix-gc
     Version: 0.1.0-1
   '';

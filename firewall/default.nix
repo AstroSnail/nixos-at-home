@@ -17,7 +17,7 @@
   debianControl = ''
     Architecture: all
     Description: service-firewall
-    Maintainer: Erry <astrosnail@protonmail.com>
+    Maintainer: Erry <${config.email}>
     Package: service-firewall
     Version: 0.1.0-1
   '';

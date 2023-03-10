@@ -2,7 +2,7 @@
 
 {
   security.acme.acceptTerms = true;
-  security.acme.defaults.email = "astrosnail@protonmail.com";
+  security.acme.defaults.email = config.email;
   security.acme.defaults.dnsProvider = "rfc2136";
   security.acme.defaults.credentialsFile =
     pkgs.writeText "credentials.txt" "RFC2136_NAMESERVER=127.0.0.1";
@@ -15,7 +15,7 @@
   debianControl = ''
     Architecture: all
     Description: service-acme
-    Maintainer: Erry <astrosnail@protonmail.com>
+    Maintainer: Erry <${config.email}>
     Package: service-acme
     Version: 0.1.0-1
   '';

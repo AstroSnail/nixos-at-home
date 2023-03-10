@@ -1,8 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }@args:
 
 let
   zone-file = pkgs.writeText "astrosnail.pt.eu.org.zone"
-    (import ./astrosnail.pt.eu.org.zone.nix { inherit config; });
+    (import ./astrosnail.pt.eu.org.zone.nix args);
   #bind-config = pkgs.writeText "named.conf" ''
   #  zone "astrosnail.pt.eu.org" {
   #    type native;
@@ -101,7 +101,7 @@ in {
   debianControl = ''
     Architecture: all
     Description: service-powerdns
-    Maintainer: Erry <astrosnail@protonmail.com>
+    Maintainer: Erry <${config.email}>
     Package: service-powerdns
     Version: 0.1.0-1
   '';

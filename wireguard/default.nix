@@ -33,7 +33,7 @@
   debianControl = ''
     Architecture: all
     Description: service-wireguard
-    Maintainer: Erry <astrosnail@protonmail.com>
+    Maintainer: Erry <${config.email}>
     Package: service-wireguard
     Version: 0.1.0-1
   '';

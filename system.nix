@@ -18,6 +18,8 @@ in {
   config.networking.domain = "astrosnail.pt.eu.org";
 
   # useful data
+  options.email = lib.mkOption { type = t.str; };
+  config.email = "astrosnail@protonmail.com";
   options.ips = lib.mkOption { type = t.lazyAttrsOf t.str; };
   config.ips = {
     #snail-ipv4 = "94.60.30.250";
