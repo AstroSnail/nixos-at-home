@@ -9,6 +9,7 @@
         "firewall"
         "nix-gc"
         "powerdns"
+        "tor"
         "ubuntu-advantage-tools-stub"
         "wireguard"
         "yggdrasil"
