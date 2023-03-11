@@ -22,8 +22,12 @@
   '';
 
   installScript = let
-
     # generally simplified copy of functions in the nixos module
+
+    certs = lib.attrNames config.security.acme.certs;
+    certs-str-of = certs: lib.concatStringsSep " " certs;
+    certs-str = certs-str-of certs;
+
     mkHash = val: lib.substring 0 20 (builtins.hashString "sha256" val);
     mkAccountHash = data:
       mkHash "${builtins.toString data.server} ${data.keyType} ${data.email}";
@@ -31,24 +35,18 @@
       inherit cert;
       accountHash = mkAccountHash data;
     };
-    certConfigs = lib.mapAttrs certToConfig config.security.acme.certs;
-    account-configs =
-      lib.groupBy (conf: conf.accountHash) (lib.attrValues certConfigs);
-    account-certs-tail =
-      lib.mapAttrs (_: confs: builtins.map (conf: conf.cert) (lib.tail confs))
-      account-configs;
 
-    certs = lib.attrNames certConfigs;
-    certs-str-of = certs: lib.concatStringsSep " " certs;
-    certs-str = certs-str-of certs;
+    certConfigs = lib.mapAttrsToList certToConfig config.security.acme.certs;
+    account-configs = lib.groupBy (conf: conf.accountHash) certConfigs;
 
     account-hashes = lib.attrNames account-configs;
     account-hashes-str = lib.concatStringsSep " " account-hashes;
 
-    account-required-by = builtins.map (hash:
-      "    (${hash}) required_by='${
-            certs-str-of account-certs-tail.${hash}
-          }';;") account-hashes;
+    certs-tail-of = confs:
+      certs-str-of (builtins.map (conf: conf.cert) (lib.tail confs));
+    account-required-by = lib.mapAttrsToList
+      (hash: confs: "    (${hash}) required_by='${certs-tail-of confs}';;")
+      account-configs;
     account-required-by-str = lib.concatStringsSep "\n" account-required-by;
 
     text = lib.readFile ./install.sh;
