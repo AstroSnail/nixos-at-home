@@ -1,3 +1,6 @@
+# TODO: edit interface services to require key and want peers, instead of
+#       inverse requiredBy and wantedBy
+
 profile=${profile:?"'profile' variable missing!"}
 install_to=${install_to:?"'install_to' variable missing!"}
 

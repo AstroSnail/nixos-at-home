@@ -1,3 +1,5 @@
+# TODO: edit cert services to require account, instead of inverse requiredBy
+
 profile=${profile:?"'profile' variable missing!"}
 install_to=${install_to:?"'install_to' variable missing!"}
 
