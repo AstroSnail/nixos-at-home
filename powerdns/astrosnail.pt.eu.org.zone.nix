@@ -12,15 +12,17 @@ in ''
   $TTL 1h
 
   ;                                  SERIAL REFRESH RETRY EXPIRE MINIMUM
-  @         SOA    ns1 ${email-soa}. 0      3h      1h    1w     1h
-            NS     ns1
+  @         SOA    sea ${email-soa}. 0      3h      1h    1w     1h
+            NS     sea
             NS     ns2
             A      ${config.ips.sea-ipv4}
             AAAA   ${config.ips.sea-ipv6}
 
-  ; nameservers
-  ns1       A      ${config.ips.sea-ipv4}
-            AAAA   ${config.ips.sea-ipv6}
+  ; i don't have a second nameserver; use sea again.
+  ; dns specifically is hard to host at home, so i won't.
+  ; if the nameservers change, i'll have to enter the nic.eu.org control panel
+  ; anyway to update their glue records, so linking the hostnames directly in
+  ; the NS records imposes no additional effort.
   ns2       A      ${config.ips.sea-ipv4}
             AAAA   ${config.ips.sea-ipv6}
 
@@ -37,8 +39,8 @@ in ''
   snail     AAAA   ${config.ips.snail-ipv6}
   soon      A      ${config.ips.soon-ipv4}
             AAAA   ${config.ips.soon-ipv6}
-            ; Portugal (centered at Picoto da Melriça)
-            LOC    39 41 40 N 8 7 50 W 595m 300000m 100m 10m
+            ; Portugal (centered at the Picoto da Melriça)
+            LOC    39 41 40 N 8 7 50 W 595m 600000m 100m 10m
   sea       A      ${config.ips.sea-ipv4}
             AAAA   ${config.ips.sea-ipv6}
             ; OVHcloud Gravelines
@@ -55,9 +57,14 @@ in ''
   webgl     CNAME  snail
   www       CNAME  snail
 
-  ; experimental, consider removing later
-  *         CNAME  sea
+  ; experimental
+  ; powerdns live-signing signs wildcards
+  ; but what about offline-signing?
+  ;*         CNAME  sea
 
   ; funny
+  ; keep in mind: a CNAME is not a delegation point
+  ; i have authority over this CNAME record
+  ; (but, incidentally, not the domain it points to)
   so-you-thought-you-could-just-have-a-subdomain-for-yourself-huh.you-wanted-to-show-the-whole-world-that-you-can-just-ask-for-it.well-let-me-teach-you-a-little-something-from-round-these-parts.one-does-not-simply-get-a-subdomain-from.astrosnail.pt.eu.org.  CNAME  juhu.is.not.malic.ee. ;juhu.internet-box.ch.
 ''
