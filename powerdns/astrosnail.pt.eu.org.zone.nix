@@ -27,8 +27,12 @@ in ''
   snail     AAAA   ${config.ips.snail-ipv6}
   soon      A      ${config.ips.soon-ipv4}
             AAAA   ${config.ips.soon-ipv6}
+            ; Portugal (centered at Picoto da Melriça)
+            LOC    39 41 40 N 8 7 50 W 595m 300000m 100m 10m
   sea       A      ${config.ips.sea-ipv4}
             AAAA   ${config.ips.sea-ipv6}
+            ; OVHcloud Gravelines
+            LOC    51 1 0 N 2 9 20 E 5m 500m 100m 10m
 
   ; subdomains
   bin       CNAME  snail
