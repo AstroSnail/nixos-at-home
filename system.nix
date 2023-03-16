@@ -53,7 +53,7 @@ in {
 
     soon = {
       ipv4 = "94.60.30.250";
-      ipv6 = "2001:818:df73:f400:0:abba:cad:abba";
+      ipv6 = "2001:818:df73:f400::abba:cad:abba";
       wg-addr = "fd57:337f:9040:1:2:3:4:5";
       wg-pub = "Rc7Ft6ljK9pyRmrwzQmfsIEIpqsTpCu+1hlAaTfDyzc=";
       yggd-addr = "200:677f:abc:380b:6c78:73b5:c72e:c1f3";
