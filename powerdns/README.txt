@@ -6,4 +6,6 @@ Useful commands are below (eliding boilerplate like
 - pdnsutil export-zone-ds astrosnail.pt.eu.org
 - # updating zone records
 - systemctl start pdns-update-zone.service
-- # TODO: dnssec key rollovers
+DNSSEC KSK rollover happens during january.
+Make sure to update DS records at the parent at some point.
+Ideally between 8-25 january.
