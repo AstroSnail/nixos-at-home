@@ -9,6 +9,4 @@
     Conflicts: ubuntu-advantage-tools
     Replaces: ubuntu-advantage-tools
   '';
-
-  installScript = "";
 }

@@ -6,8 +6,14 @@
   services.yggdrasil.settings = {
     IfName = "yggdrasil0";
     Listen = [ "tcp://[::]:123" ];
+    AllowedPublicKeys = [
+      config.hosts.soon.yggd-pub
+      config.hosts.sea.yggd-pub
+      config.hosts.sonar.yggd-pub
+      config.hosts.soon-prime.yggd-pub
+    ];
+    Peers = [ "tcp://[${config.hosts.soon.ipv6}]:123" ];
     NodeInfo = { name = config.networking.fqdnOrHostName; };
-    Peers = [ "tcp://[${config.ips.soon-ipv6}]:123" ];
   };
 
   systemd.services.yggdrasil.requires = [ "yggdrasil-activation.service" ];

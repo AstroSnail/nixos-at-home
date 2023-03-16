@@ -15,16 +15,16 @@ in ''
   @         SOA    sea ${email-soa}. 0      3h      1h    1w     1h
             NS     sea
             NS     ns2
-            A      ${config.ips.sea-ipv4}
-            AAAA   ${config.ips.sea-ipv6}
+            A      ${config.hosts.sea.ipv4}
+            AAAA   ${config.hosts.sea.ipv6}
 
   ; i don't have a second nameserver; use sea again.
   ; dns specifically is hard to host at home, so i won't.
   ; if the nameservers change, i'll have to enter the nic.eu.org control panel
   ; anyway to update their glue records, so linking the hostnames directly in
   ; the NS records imposes no additional effort.
-  ns2       A      ${config.ips.sea-ipv4}
-            AAAA   ${config.ips.sea-ipv6}
+  ns2       A      ${config.hosts.sea.ipv4}
+            AAAA   ${config.hosts.sea.ipv6}
 
   ; info
   @         CAA    128 issue        "letsencrypt.org; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1001995317; validationmethods=dns-01"
@@ -36,13 +36,13 @@ in ''
   _validation-contactemail  TXT  "${config.email}"
 
   ; hosts
-  snail     AAAA   ${config.ips.snail-ipv6}
-  soon      A      ${config.ips.soon-ipv4}
-            AAAA   ${config.ips.soon-ipv6}
+  snail     AAAA   ${config.hosts.snail.ipv6}
+  soon      A      ${config.hosts.soon.ipv4}
+            AAAA   ${config.hosts.soon.ipv6}
             ; Portugal (centered at the Picoto da Melriça)
             LOC    39 41 40 N 8 7 50 W 595m 600000m 100m 10m
-  sea       A      ${config.ips.sea-ipv4}
-            AAAA   ${config.ips.sea-ipv6}
+  sea       A      ${config.hosts.sea.ipv4}
+            AAAA   ${config.hosts.sea.ipv6}
             ; OVHcloud Gravelines
             LOC    51 1 0 N 2 9 20 E 5m 500m 100m 10m
 

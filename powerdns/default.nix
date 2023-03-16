@@ -25,19 +25,17 @@ let
   ];
 
   configDir =
-    pkgs.writeTextDir "pdns.conf" "${config.services.powerdns.extraConfig}";
+    pkgs.writeTextDir "pdns.conf" config.services.powerdns.extraConfig;
 
 in {
   services.powerdns.enable = true;
   services.powerdns.extraConfig = to-pdns-config {
-    # zero addresses are already being used
-    # (is it systemd 127.0.0.53%lo???)
     local-address = [
       "127.0.0.1"
-      "${config.ips.sea-ipv4}"
-      "[${config.ips.sea-ipv6}]"
-      "[${config.ips.sea-yggd}]"
-      "[${config.ips.sea-wg}]"
+      config.hosts.sea.ipv4
+      "[${config.hosts.sea.ipv6}]"
+      "[${config.hosts.sea.wg-addr}]"
+      "[${config.hosts.sea.yggd-addr}]"
     ];
     # alias is incompatible with live-signing
     #expand-alias = true;
