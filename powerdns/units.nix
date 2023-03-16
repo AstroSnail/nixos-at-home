@@ -47,6 +47,7 @@ in {
     pdns-rollover-zsk-phase1 = {
       description = "PowerDNS DNSSEC ZSK rollover: new DNSKEY";
       path = [ pkgs.pdns pkgs.sqlite ];
+      unitConfig.ConditionPathExists = "/var/lib/pdns/rollover-zsk.txt";
       serviceConfig.Type = "oneshot";
       script = ''
         pdnsutil --config-dir=${configDir} add-zone-key astrosnail.pt.eu.org zsk inactive published ed25519 >/var/lib/pdns/rollover-zsk-new.txt
@@ -57,6 +58,10 @@ in {
     pdns-rollover-zsk-phase2 = {
       description = "PowerDNS DNSSEC ZSK rollover: new RRSIGs";
       path = [ pkgs.pdns pkgs.sqlite ];
+      unitConfig.ConditionPathExists = [
+        "/var/lib/pdns/rollover-zsk.txt"
+        "/var/lib/pdns/rollover-zsk-new.txt"
+      ];
       serviceConfig.Type = "oneshot";
       script = ''
         zskOld=$(cat /var/lib/pdns/rollover-zsk.txt)
@@ -70,6 +75,10 @@ in {
     pdns-rollover-zsk-phase3 = {
       description = "PowerDNS DNSSEC ZSK rollover: DNSKEY removal";
       path = [ pkgs.pdns pkgs.sqlite ];
+      unitConfig.ConditionPathExists = [
+        "/var/lib/pdns/rollover-zsk.txt"
+        "/var/lib/pdns/rollover-zsk-new.txt"
+      ];
       serviceConfig.Type = "oneshot";
       script = ''
         zskOld=$(cat /var/lib/pdns/rollover-zsk.txt)
@@ -82,6 +91,7 @@ in {
     pdns-rollover-ksk-phase1 = {
       description = "PowerDNS DNSSEC KSK rollover: new DNSKEY";
       path = [ pkgs.pdns pkgs.sqlite ];
+      unitConfig.ConditionPathExists = "/var/lib/pdns/rollover-ksk.txt";
       serviceConfig.Type = "oneshot";
       script = ''
         pdnsutil --config-dir=${configDir} add-zone-key astrosnail.pt.eu.org ksk active published ed25519 >/var/lib/pdns/rollover-ksk-new.txt
@@ -92,6 +102,10 @@ in {
     pdns-rollover-ksk-phase2 = {
       description = "PowerDNS DNSSEC KSK rollover: DNSKEY removal";
       path = [ pkgs.pdns pkgs.sqlite ];
+      unitConfig.ConditionPathExists = [
+        "/var/lib/pdns/rollover-ksk.txt"
+        "/var/lib/pdns/rollover-ksk-new.txt"
+      ];
       serviceConfig.Type = "oneshot";
       script = ''
         kskOld=$(cat /var/lib/pdns/rollover-ksk.txt)
