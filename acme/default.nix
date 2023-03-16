@@ -9,8 +9,8 @@
   security.acme.defaults.ocspMustStaple = true;
   #security.acme.defaults.reloadServices = [ ];
   security.acme.certs.astrosnail = {
-    domain = "astrosnail.pt.eu.org";
-    extraDomainNames = [ "*.astrosnail.pt.eu.org" ];
+    domain = "sea.astrosnail.pt.eu.org";
+    extraDomainNames = [ "astrosnail.pt.eu.org" "www.astrosnail.pt.eu.org" ];
   };
 
   debianControl = ''

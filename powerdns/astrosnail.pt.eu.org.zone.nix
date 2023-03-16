@@ -28,7 +28,7 @@ in ''
 
   ; info
   @         CAA    128 issue        "letsencrypt.org; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1001995317; validationmethods=dns-01"
-            CAA    128 issuewild    "letsencrypt.org; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1001995317; validationmethods=dns-01"
+            CAA      0 issuewild    ";"
             CAA      0 iodef        "mailto:${config.email}"
             CAA      0 contactemail "${config.email}"
             TXT    "keybase-site-verification=HNPj0etgb3YWy5gfHR9xtMucE44Lh5siUnf4UdQY45g"
