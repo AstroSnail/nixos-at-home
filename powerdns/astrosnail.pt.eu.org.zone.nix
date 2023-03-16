@@ -5,35 +5,31 @@ let
   email-local-dots =
     lib.replaceStrings [ "." ] [ "\\." ] (lib.elemAt email-split 0);
   email-domain = lib.elemAt email-split 1;
-  email-soa = "${email-local-dots}.${email-domain}";
+  email-soa = "${email-local-dots}.${email-domain}.";
 
-in ''
+in assert (lib.length email-split) == 2;
+
+''
   $ORIGIN astrosnail.pt.eu.org.
   $TTL 1h
 
-  ;                                  SERIAL REFRESH RETRY EXPIRE MINIMUM
-  @         SOA    sea ${email-soa}. 0      3h      1h    1w     1h
+  ;                                 SERIAL REFRESH RETRY EXPIRE MINIMUM
+  @         SOA    sea ${email-soa} 0      3h      1h    1w     1h
+            ; if the nameservers change, i'll have to enter the nic.eu.org
+            ; control panel anyway to update their glue records, so linking the
+            ; hostnames directly in the NS records imposes no extra effort.
             NS     sea
             NS     ns2
-            A      ${config.hosts.sea.ipv4}
-            AAAA   ${config.hosts.sea.ipv6}
-
-  ; i don't have a second nameserver; use sea again.
-  ; dns specifically is hard to host at home, so i won't.
-  ; if the nameservers change, i'll have to enter the nic.eu.org control panel
-  ; anyway to update their glue records, so linking the hostnames directly in
-  ; the NS records imposes no additional effort.
-  ns2       A      ${config.hosts.sea.ipv4}
-            AAAA   ${config.hosts.sea.ipv6}
-
-  ; info
-  @         CAA    128 issue        "letsencrypt.org; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1001995317; validationmethods=dns-01"
+            ; info
+            CAA    128 issue        "letsencrypt.org; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1001995317; validationmethods=dns-01"
             CAA      0 issuewild    ";"
             CAA      0 iodef        "mailto:${config.email}"
             CAA      0 contactemail "${config.email}"
+            RP     ${email-soa} erry
             TXT    "keybase-site-verification=HNPj0etgb3YWy5gfHR9xtMucE44Lh5siUnf4UdQY45g"
   _ens      TXT    "a=0x4650264Dd8Fb4e32A88168E6206e0779D11800c7"
   _validation-contactemail  TXT  "${config.email}"
+  erry      TXT    "Erry! <${config.email}>"
 
   ; hosts
   snail     AAAA   ${config.hosts.snail.ipv6}
@@ -46,7 +42,15 @@ in ''
             ; OVHcloud Gravelines
             LOC    51 1 0 N 2 9 20 E 5m 500m 100m 10m
 
-  ; subdomains
+  ; services
+  ; as long as ALIAS/ANAME still isn't a thing, a couple extra A/AAAA records
+  ; are still necessary
+  @         A      ${config.hosts.sea.ipv4}
+            AAAA   ${config.hosts.sea.ipv6}
+  ; i don't have a second nameserver; use sea again.
+  ; dns specifically is hard to host at home, so i won't.
+  ns2       A      ${config.hosts.sea.ipv4}
+            AAAA   ${config.hosts.sea.ipv6}
   bin       CNAME  snail
   blog      CNAME  snail
   click     CNAME  snail
