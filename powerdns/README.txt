@@ -1,4 +1,3 @@
-After installing and starting, this service needs additional configuration.
 After installing and starting, maintenance has to be done manually.
 Useful commands are below (eliding boilerplate like
 `sudo -u pdns $(command -v pdnsutil) --config-dir=...`)
