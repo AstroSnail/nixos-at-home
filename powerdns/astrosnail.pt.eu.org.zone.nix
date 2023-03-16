@@ -7,6 +7,51 @@ let
   email-domain = lib.elemAt email-split 1;
   email-soa = "${email-local-dots}.${email-domain}.";
 
+  key-to-zone = host: key: value:
+    if value == "" then
+      ""
+    else
+      let
+        recordData = {
+          ipv4 = {
+            prefix = "";
+            type = "A";
+            qvalue = value;
+          };
+          ipv6 = {
+            prefix = "";
+            type = "AAAA";
+            qvalue = value;
+          };
+          wg-addr = {
+            prefix = "wireguard.";
+            type = "AAAA";
+            qvalue = value;
+          };
+          wg-pub = {
+            prefix = "wireguard.";
+            type = "TXT";
+            qvalue = ''"${value}"'';
+          };
+          yggd-addr = {
+            prefix = "yggdrasil.";
+            type = "AAAA";
+            qvalue = value;
+          };
+          yggd-pub = {
+            prefix = "yggdrasil.";
+            type = "TXT";
+            qvalue = ''"${value}"'';
+          };
+        };
+      in with recordData.${key}; ''
+        ${prefix}${host} ${type} ${qvalue}
+      '';
+  host-to-zone = host: data:
+    lib.concatStrings (lib.mapAttrsToList (key-to-zone host) data);
+  hosts-to-zone = hosts:
+    lib.concatStrings (lib.mapAttrsToList host-to-zone hosts);
+
 in assert (lib.length email-split) == 2;
 
 ''
@@ -32,15 +77,11 @@ in assert (lib.length email-split) == 2;
   erry      TXT    "Erry! <${config.email}>"
 
   ; hosts
-  snail     AAAA   ${config.hosts.snail.ipv6}
-  soon      A      ${config.hosts.soon.ipv4}
-            AAAA   ${config.hosts.soon.ipv6}
-            ; Portugal (centered at the Picoto da Melriça)
-            LOC    39 41 40 N 8 7 50 W 595m 600000m 100m 10m
-  sea       A      ${config.hosts.sea.ipv4}
-            AAAA   ${config.hosts.sea.ipv6}
-            ; OVHcloud Gravelines
-            LOC    51 1 0 N 2 9 20 E 5m 500m 100m 10m
+  ${hosts-to-zone config.hosts}
+  ; Portugal (centered at the Picoto da Melriça)
+  soon      LOC    39 41 40 N 8 7 50 W 595m 600000m 100m 10m
+  ; OVHcloud Gravelines
+  sea       LOC    51 1 0 N 2 9 20 E 5m 500m 100m 10m
 
   ; services
   ; as long as ALIAS/ANAME still isn't a thing, a couple extra A/AAAA records
