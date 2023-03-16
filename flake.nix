@@ -19,7 +19,7 @@
       forAllSystems = lib.genAttrs supportedSystems;
       forAllServices = lib.genAttrs services;
       # does there not exist a concat-map for attribute sets?
-      # there exists lib.concatMapAttrs but i want to take a set, not attrset
+      # there exists lib.concatMapAttrs but i want to take a list, not attrset
       forAllServicesFlat = f:
         lib.foldl lib.trivial.mergeAttrs { } (builtins.map f services);
     in {
