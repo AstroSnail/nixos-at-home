@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  imports = [ ./units.nix ];
+
   security.acme.acceptTerms = true;
   security.acme.defaults.email = config.email;
   security.acme.defaults.dnsProvider = "rfc2136";
