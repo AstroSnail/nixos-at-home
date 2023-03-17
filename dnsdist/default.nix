@@ -1,6 +1,7 @@
 { config, lib, ... }:
 
 {
+  # switch config when dnsdist hits 1.8.0
   services.dnsdist.enable = true;
   services.dnsdist.extraConfig = ''
     setACL({ '0.0.0.0/0', '::/0' })
@@ -11,7 +12,7 @@
     addLocal('[${config.hosts.sea.yggd-addr}]')
 
     addDOHLocal('[::1]')
-
+  '' + (if false then ''
     addTLSLocal('[::1]', '/var/lib/acme/astrosnail/fullchain.pem', '/var/lib/acme/astrosnail/key.pem', {
       ocspResponses = { '/var/lib/acme/astrosnail/ocsp.der' },
       minTLSVersion = 'tls1.3',
@@ -22,7 +23,19 @@
         '[${config.hosts.sea.yggd-addr}]'
       }
     })
-
+  '' else ''
+    certFile = '/var/lib/acme/astrosnail/fullchain.pem'
+    keyFile = '/var/lib/acme/astrosnail/key.pem'
+    options = {
+      ocspResponses = { '/var/lib/acme/astrosnail/ocsp.der' },
+      minTLSVersion = 'tls1.3'
+    }
+    addTLSLocal('[::1]', certFile, keyFile, options)
+    addTLSLocal('${config.hosts.sea.ipv4}', certFile, keyFile, options)
+    addTLSLocal('[${config.hosts.sea.ipv6}]', certFile, keyFile, options)
+    addTLSLocal('[${config.hosts.sea.wg-addr}]', certFile, keyFile, options)
+    addTLSLocal('[${config.hosts.sea.yggd-addr}]', certFile, keyFile, options)
+  '') + ''
     newServer({
       address = '127.0.0.1',
       checkName = 'sea.astrosnail.pt.eu.org'
