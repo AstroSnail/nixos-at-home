@@ -63,7 +63,10 @@ in ''
             ; control panel anyway to update their glue records, so linking the
             ; hostnames directly in the NS records imposes no extra effort.
             NS     sea
-            NS     ns2
+            ; i don't have a second nameserver; use sea again.
+            ; (but under a different name)
+            ; dns specifically is hard to host at home, so i won't.
+            NS     vps-04b3828b.vps.ovh.net.
             ; info
             CAA    128 issue        "letsencrypt.org; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1001995317; validationmethods=dns-01"
             CAA      0 issuewild    ";"
@@ -77,6 +80,7 @@ in ''
 
   ; hosts
   ${hosts-to-zone config.hosts}
+  ; TODO: LOC in hosts config?
   ; Portugal (centered at the Picoto da Melriça)
   soon      LOC    39 41 40 N 8 7 50 W 595m 600000m 100m 10m
   ; OVHcloud Gravelines
@@ -86,10 +90,6 @@ in ''
   ; as long as ALIAS/ANAME still isn't a thing, a couple extra A/AAAA records
   ; are still necessary
   @         A      ${config.hosts.sea.ipv4}
-            AAAA   ${config.hosts.sea.ipv6}
-  ; i don't have a second nameserver; use sea again.
-  ; dns specifically is hard to host at home, so i won't.
-  ns2       A      ${config.hosts.sea.ipv4}
             AAAA   ${config.hosts.sea.ipv6}
   bin       CNAME  snail
   blog      CNAME  snail
