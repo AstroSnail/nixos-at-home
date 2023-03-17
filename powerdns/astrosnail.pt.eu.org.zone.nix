@@ -5,7 +5,8 @@ let
   email-local-dots =
     lib.replaceStrings [ "." ] [ "\\." ] (lib.elemAt email-split 0);
   email-domain = lib.elemAt email-split 1;
-  email-soa = "${email-local-dots}.${email-domain}.";
+  email-soa = assert (lib.length email-split) == 2;
+    "${email-local-dots}.${email-domain}.";
 
   key-to-zone = host: key: value:
     if value == "" then
@@ -52,9 +53,7 @@ let
   hosts-to-zone = hosts:
     lib.concatStrings (lib.mapAttrsToList host-to-zone hosts);
 
-in assert (lib.length email-split) == 2;
-
-''
+in ''
   $ORIGIN astrosnail.pt.eu.org.
   $TTL 1h
 
