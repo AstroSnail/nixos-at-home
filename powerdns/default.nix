@@ -20,13 +20,7 @@ in {
 
   services.powerdns.enable = true;
   services.powerdns.extraConfig = to-pdns-config {
-    local-address = [
-      "127.0.0.1"
-      config.hosts.sea.ipv4
-      "[${config.hosts.sea.ipv6}]"
-      "[${config.hosts.sea.wg-addr}]"
-      "[${config.hosts.sea.yggd-addr}]"
-    ];
+    local-address = "127.0.0.1";
     # alias is incompatible with live-signing
     #expand-alias = true;
     #resolver = "127.0.0.53";
@@ -38,7 +32,7 @@ in {
     # bind-hybrid requires disabling zone cache
     #zone-cache-refresh-interval = 0;
     # other
-    reuseport = true;
+    #reuseport = true;
     server-id = config.networking.fqdnOrHostName;
 
     #launch = [ "bind" "gsqlite3" ];

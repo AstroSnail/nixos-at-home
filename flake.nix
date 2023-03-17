@@ -6,6 +6,7 @@
       services = [
         "acme"
         "configs"
+        "dnsdist"
         "firewall"
         "nix-gc"
         "powerdns"
