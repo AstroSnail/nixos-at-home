@@ -82,9 +82,9 @@ in ''
   ${hosts-to-zone config.hosts}
   ; TODO: LOC in hosts config?
   ; Portugal (centered at the Picoto da Melriça)
-  soon      LOC    39 41 40 N 8 7 50 W 595m 600000m 100m 10m
+  soon      LOC    39 41 40 N 8 7 50 W 592m 1m 600000m 2000m
   ; OVHcloud Gravelines
-  sea       LOC    51 1 0 N 2 9 20 E 5m 500m 100m 10m
+  sea       LOC    51 1 0 N 2 9 20 E 10m 1m 1000m 20m
 
   ; services
   ; as long as ALIAS/ANAME still isn't a thing, a couple extra A/AAAA records
