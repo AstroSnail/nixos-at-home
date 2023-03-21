@@ -42,7 +42,11 @@
     })
   '';
 
-  systemd.services.dnsdist.serviceConfig.SupplementaryGroups = "acme";
+  systemd.services.dnsdist = {
+    wants = [ "acme-finished-astrosnail.target" ];
+    after = [ "acme-finished-astrosnail.target" ];
+    serviceConfig.SupplementaryGroups = "acme";
+  };
 
   debianControl = ''
     Architecture: all

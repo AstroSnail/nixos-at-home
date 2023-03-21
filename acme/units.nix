@@ -2,6 +2,10 @@
 
 {
   systemd.services.acme-astrosnail.wants = [ "acme-ocsp-astrosnail.service" ];
+  systemd.targets.acme-finished-astrosnail.requires =
+    [ "acme-ocsp-astrosnail.service" ];
+  systemd.targets.acme-finished-astrosnail.after =
+    [ "acme-ocsp-astrosnail.service" ];
 
   systemd.services.acme-ocsp-astrosnail = {
     description = "OCSP response fetcher for astrosnail";
