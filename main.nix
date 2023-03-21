@@ -4,8 +4,8 @@
   options = let
     t = lib.types;
     optionStr = lib.mkOption {
-      type = t.str;
-      default = "";
+      type = t.nullOr t.str;
+      default = null;
     };
   in {
     # for building the packages
@@ -17,7 +17,7 @@
     hosts = let
       host = { config, ... }: {
         options = {
-          # TODO: make these fail when referenced and unset, rather than empty
+          loc = optionStr;
           ipv4 = optionStr;
           ipv6 = optionStr;
           wg-addr = optionStr;
@@ -48,11 +48,11 @@
         ipv6 = "2001:818:df73:f400:c0ff:eeba:d7ea:900d";
         wg-addr = "fd57:337f:9040:1:1:1:1:1";
         #wg-pub = "Rc7Ft6ljK9pyRmrwzQmfsIEIpqsTpCu+1hlAaTfDyzc=";
-        #yggd-addr = "";
-        #yggd-pub = "";
       };
 
       soon = {
+        # Portugal (centered at the Picoto da Melriça)
+        loc = "39 41 40 N 8 7 50 W 592m 1m 600000m 2000m";
         ipv4 = "94.60.30.250";
         ipv6 = "2001:818:df73:f400::abba:cad:abba";
         wg-addr = "fd57:337f:9040:1:2:3:4:5";
@@ -63,6 +63,8 @@
       };
 
       sea = {
+        # OVHcloud Gravelines
+        loc = "51 1 0 N 2 9 20 E 10m 1m 1000m 20m";
         ipv4 = "146.59.231.219";
         ipv6 = "2001:41d0:304:200::4150";
         wg-addr = "fd57:337f:9040:1::5ea";
@@ -73,8 +75,6 @@
       };
 
       smol = {
-        #ipv4 = "";
-        #ipv6 = "";
         wg-addr = "fd57:337f:9040:1:1:1:1:2";
         wg-pub = "Lp5hmSdapd8LPYpdLb2+8eBKq3mV6PO7gi2VIVv3d2s=";
         #yggd-addr = "";
@@ -82,8 +82,6 @@
       };
 
       sonar = {
-        #ipv4 = "";
-        #ipv6 = "";
         wg-addr = "fd57:337f:9040:1:9ca7:9ca7:9ca7:9ca7";
         wg-pub = "spQBkQX/+mB1MmVvDnjs1IEHInDKOxPMjhgs0OyJCi8=";
         yggd-addr = "202:2d0d:edc4:38af:ccb9:efb6:59de:421d";
@@ -92,8 +90,6 @@
       };
 
       soon-prime = {
-        #ipv4 = "";
-        #ipv6 = "";
         wg-addr = "fd57:337f:9040:1:5:4:3:2";
         wg-pub = "q9Pmyalgp+Qt2NU3ewng0WW7lfFIjEEMExWqHg5CVV0=";
         yggd-addr = "200:2ab6:23c:e13c:5902:4bbc:4afe:509c";

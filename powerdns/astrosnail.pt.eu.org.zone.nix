@@ -9,11 +9,16 @@ let
     "${email-local-dots}.${email-domain}.";
 
   key-to-zone = host: key: value:
-    if value == "" then
+    if value == null then
       ""
     else
       let
         recordData = {
+          loc = {
+            prefix = "";
+            type = "LOC";
+            qvalue = value;
+          };
           ipv4 = {
             prefix = "";
             type = "A";
@@ -77,14 +82,10 @@ in ''
   _ens      TXT    "a=0x4650264Dd8Fb4e32A88168E6206e0779D11800c7"
   _validation-contactemail  TXT  "${config.email}"
   erry      TXT    "Erry! <${config.email}>"
+  onion     CNAME  astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion.
 
   ; hosts
   ${hosts-to-zone config.hosts}
-  ; TODO: LOC in hosts config?
-  ; Portugal (centered at the Picoto da Melriça)
-  soon      LOC    39 41 40 N 8 7 50 W 592m 1m 600000m 2000m
-  ; OVHcloud Gravelines
-  sea       LOC    51 1 0 N 2 9 20 E 10m 1m 1000m 20m
 
   ; services
   ; as long as ALIAS/ANAME still isn't a thing, a couple extra A/AAAA records
