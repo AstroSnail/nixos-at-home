@@ -6,8 +6,10 @@
     HiddenServiceNonAnonymousMode = true;
     Sandbox = true;
   };
-  services.tor.relay.onionServices.astrosnail = {
+  services.tor.relay.onionServices.astroslomofimguy = {
     map = [ 22 ];
+    secretKey =
+      "/var/lib/tor/onion/astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion/hs_ed25519_secret_key";
     settings.HiddenServiceSingleHopMode = true;
   };
 
