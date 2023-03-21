@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   systemd.services.acme-astrosnail.wants = [ "acme-ocsp-astrosnail.service" ];
@@ -18,6 +18,11 @@
       openssl ocsp -issuer /var/lib/acme/astrosnail/chain.pem -cert /var/lib/acme/astrosnail/fullchain.pem -no_nonce -respout /var/lib/acme/astrosnail/ocsp.der -url http://r3.o.lencr.org
       chown acme: /var/lib/acme/astrosnail/ocsp.der
       chmod 640 /var/lib/acme/astrosnail/ocsp.der
+    '';
+    postStart = ''
+      systemctl --no-block try-reload-or-restart ${
+        lib.escapeShellArgs config.security.acme.certs.astrosnail.reloadServices
+      }
     '';
   };
 
