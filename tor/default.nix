@@ -7,40 +7,16 @@
     Sandbox = true;
   };
   services.tor.relay.onionServices.astroslomofimguy = {
-    map = [
-      {
-        port = 22;
-        target = {
-          addr = "[${config.hosts.sea.ipv6}]";
-          port = 22;
-        };
-      }
-      {
-        port = 53;
-        target = {
-          addr = "[${config.hosts.sea.ipv6}]";
-          port = 53;
-        };
-      }
-      {
-        port = 80;
-        target = { unix = "/var/lib/nginx/onion.socket"; };
-      }
-      {
-        port = 443;
-        target = {
-          addr = "[${config.hosts.sea.ipv6}]";
-          port = 443;
-        };
-      }
-      {
-        port = 853;
-        target = {
-          addr = "[${config.hosts.sea.ipv6}]";
-          port = 853;
-        };
-      }
-    ];
+    map = builtins.map (port: {
+      inherit port;
+      target = {
+        inherit port;
+        addr = "[${config.hosts.sea.ipv6}]";
+      };
+    }) [ 22 53 443 853 ] ++ [{
+      port = 80;
+      target = { unix = "/var/lib/nginx/onion.socket"; };
+    }];
     secretKey =
       "/var/lib/tor/onion/astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion/hs_ed25519_secret_key";
     settings.HiddenServiceSingleHopMode = true;
