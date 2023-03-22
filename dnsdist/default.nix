@@ -13,11 +13,10 @@
 
     addDOHLocal('[::1]')
   '' + (if false then ''
-    addTLSLocal('[::1]', '/var/lib/acme/astrosnail/fullchain.pem', '/var/lib/acme/astrosnail/key.pem', {
+    addTLSLocal('${config.hosts.sea.ipv4}', '/var/lib/acme/astrosnail/fullchain.pem', '/var/lib/acme/astrosnail/key.pem', {
       ocspResponses = { '/var/lib/acme/astrosnail/ocsp.der' },
       minTLSVersion = 'tls1.3',
       additionalAddresses = {
-        '${config.hosts.sea.ipv4}',
         '[${config.hosts.sea.ipv6}]',
         '[${config.hosts.sea.wg-addr}]',
         '[${config.hosts.sea.yggd-addr}]'
@@ -30,14 +29,13 @@
       ocspResponses = { '/var/lib/acme/astrosnail/ocsp.der' },
       minTLSVersion = 'tls1.3'
     }
-    addTLSLocal('[::1]', certFile, keyFile, options)
     addTLSLocal('${config.hosts.sea.ipv4}', certFile, keyFile, options)
     addTLSLocal('[${config.hosts.sea.ipv6}]', certFile, keyFile, options)
     addTLSLocal('[${config.hosts.sea.wg-addr}]', certFile, keyFile, options)
     addTLSLocal('[${config.hosts.sea.yggd-addr}]', certFile, keyFile, options)
   '') + ''
     newServer({
-      address = '127.0.0.1',
+      address = '[::1]',
       checkName = 'sea.astrosnail.pt.eu.org'
     })
   '';

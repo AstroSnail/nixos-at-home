@@ -5,14 +5,20 @@
   services.yggdrasil.persistentKeys = true;
   services.yggdrasil.settings = {
     IfName = "yggdrasil0";
-    Listen = [ "tcp://[::]:123" ];
+    Listen = [
+      "tcp://[${config.hosts.sea.ipv4}]:123"
+      "tcp://[${config.hosts.sea.ipv6}]:123"
+    ];
     AllowedPublicKeys = [
       config.hosts.soon.yggd-pub
       config.hosts.sea.yggd-pub
       config.hosts.sonar.yggd-pub
       config.hosts.soon-prime.yggd-pub
     ];
-    Peers = [ "tcp://[${config.hosts.soon.ipv6}]:123" ];
+    Peers = [
+      "tcp://[${config.hosts.soon.ipv4}]:123"
+      "tcp://[${config.hosts.soon.ipv6}]:123"
+    ];
     NodeInfo = { name = config.networking.fqdnOrHostName; };
   };
 

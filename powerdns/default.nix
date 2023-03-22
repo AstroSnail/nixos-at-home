@@ -20,7 +20,7 @@ in {
 
   services.powerdns.enable = true;
   services.powerdns.extraConfig = to-pdns-config {
-    local-address = "127.0.0.1";
+    local-address = "[::1]";
     # alias is incompatible with live-signing
     #expand-alias = true;
     #resolver = "127.0.0.53";
