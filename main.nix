@@ -3,30 +3,35 @@
 {
   options = let
     t = lib.types;
+    optionLines = lib.mkOption {
+      type = t.lines;
+      default = "";
+    };
     optionStr = lib.mkOption {
       type = t.nullOr t.str;
       default = null;
     };
+    host = { config, ... }: {
+      options = {
+        loc = optionStr;
+        ipv4 = optionStr;
+        ipv6 = optionStr;
+        wg-addr = optionStr;
+        wg-pub = optionStr;
+        yggd-addr = optionStr;
+        yggd-pub = optionStr;
+      };
+    };
+    host-sub = t.submodule host;
   in {
     # for building the packages
-    debianControl = optionStr;
-    installScript = optionStr;
+    debianControl = optionLines;
+    installScript = optionLines;
 
     # useful data
     email = optionStr;
-    hosts = let
-      host = { config, ... }: {
-        options = {
-          loc = optionStr;
-          ipv4 = optionStr;
-          ipv6 = optionStr;
-          wg-addr = optionStr;
-          wg-pub = optionStr;
-          yggd-addr = optionStr;
-          yggd-pub = optionStr;
-        };
-      };
-    in lib.mkOption { type = t.lazyAttrsOf (t.submodule host); };
+    hosts = lib.mkOption { type = t.lazyAttrsOf host-sub; };
+    this-host = lib.mkOption { type = host-sub; };
   };
 
   config = {
@@ -97,6 +102,7 @@
           "eaa4fee18f61d37eda21da80d7b199cd1478dbb5a4cf1d45869b5189bbb83896";
       };
     };
+    this-host = config.hosts.sea;
   };
 
 }

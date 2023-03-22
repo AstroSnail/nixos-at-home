@@ -11,7 +11,7 @@
       inherit port;
       target = {
         inherit port;
-        addr = "[${config.hosts.sea.ipv6}]";
+        addr = "[${config.this-host.ipv6}]";
       };
     }) [ 22 53 443 853 ] ++ [{
       port = 80;

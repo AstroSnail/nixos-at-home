@@ -6,20 +6,20 @@
   services.dnsdist.extraConfig = ''
     setACL({ '0.0.0.0/0', '::/0' })
 
-    setLocal('${config.hosts.sea.ipv4}')
-    addLocal('[${config.hosts.sea.ipv6}]')
-    addLocal('[${config.hosts.sea.wg-addr}]')
-    addLocal('[${config.hosts.sea.yggd-addr}]')
+    setLocal('${config.this-host.ipv4}')
+    addLocal('[${config.this-host.ipv6}]')
+    addLocal('[${config.this-host.wg-addr}]')
+    addLocal('[${config.this-host.yggd-addr}]')
 
     addDOHLocal('[::1]')
   '' + (if false then ''
-    addTLSLocal('${config.hosts.sea.ipv4}', '/var/lib/acme/astrosnail/fullchain.pem', '/var/lib/acme/astrosnail/key.pem', {
+    addTLSLocal('${config.this-host.ipv4}', '/var/lib/acme/astrosnail/fullchain.pem', '/var/lib/acme/astrosnail/key.pem', {
       ocspResponses = { '/var/lib/acme/astrosnail/ocsp.der' },
       minTLSVersion = 'tls1.3',
       additionalAddresses = {
-        '[${config.hosts.sea.ipv6}]',
-        '[${config.hosts.sea.wg-addr}]',
-        '[${config.hosts.sea.yggd-addr}]'
+        '[${config.this-host.ipv6}]',
+        '[${config.this-host.wg-addr}]',
+        '[${config.this-host.yggd-addr}]'
       }
     })
   '' else ''
@@ -29,10 +29,10 @@
       ocspResponses = { '/var/lib/acme/astrosnail/ocsp.der' },
       minTLSVersion = 'tls1.3'
     }
-    addTLSLocal('${config.hosts.sea.ipv4}', certFile, keyFile, options)
-    addTLSLocal('[${config.hosts.sea.ipv6}]', certFile, keyFile, options)
-    addTLSLocal('[${config.hosts.sea.wg-addr}]', certFile, keyFile, options)
-    addTLSLocal('[${config.hosts.sea.yggd-addr}]', certFile, keyFile, options)
+    addTLSLocal('${config.this-host.ipv4}', certFile, keyFile, options)
+    addTLSLocal('[${config.this-host.ipv6}]', certFile, keyFile, options)
+    addTLSLocal('[${config.this-host.wg-addr}]', certFile, keyFile, options)
+    addTLSLocal('[${config.this-host.yggd-addr}]', certFile, keyFile, options)
   '') + ''
     newServer({
       address = '[::1]',

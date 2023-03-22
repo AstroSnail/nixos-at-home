@@ -6,8 +6,8 @@
   services.yggdrasil.settings = {
     IfName = "yggdrasil0";
     Listen = [
-      "tcp://[${config.hosts.sea.ipv4}]:123"
-      "tcp://[${config.hosts.sea.ipv6}]:123"
+      "tcp://${config.this-host.ipv4}:123"
+      "tcp://[${config.this-host.ipv6}]:123"
     ];
     AllowedPublicKeys = [
       config.hosts.soon.yggd-pub
@@ -16,7 +16,7 @@
       config.hosts.soon-prime.yggd-pub
     ];
     Peers = [
-      "tcp://[${config.hosts.soon.ipv4}]:123"
+      "tcp://${config.hosts.soon.ipv4}:123"
       "tcp://[${config.hosts.soon.ipv6}]:123"
     ];
     NodeInfo = { name = config.networking.fqdnOrHostName; };

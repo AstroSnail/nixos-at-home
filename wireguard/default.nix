@@ -5,11 +5,17 @@
     generatePrivateKeyFile = true;
     privateKeyFile = "/var/lib/wireguard/key";
     listenPort = 51820;
+    # TODO: filter on this-host
     peers = [
       { # soon
         publicKey = config.hosts.soon.wg-pub;
         allowedIPs = [ "${config.hosts.soon.wg-addr}/128" ];
         endpoint = "[${config.hosts.soon.yggd-addr}]:51820";
+      }
+      { # sea
+        publicKey = config.hosts.sea.wg-pub;
+        allowedIPs = [ "${config.hosts.sea.wg-addr}/128" ];
+        endpoint = "[${config.hosts.sea.yggd-addr}]:51820";
       }
       { # smol
         publicKey = config.hosts.smol.wg-pub;
@@ -27,7 +33,7 @@
         endpoint = "[${config.hosts.soon-prime.yggd-addr}]:51820";
       }
     ];
-    ips = [ "${config.hosts.sea.wg-addr}/64" ];
+    ips = [ "${config.this-host.wg-addr}/64" ];
   };
 
   debianControl = ''

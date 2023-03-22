@@ -90,8 +90,8 @@ in ''
   ; services
   ; as long as ALIAS/ANAME still isn't a thing, a couple extra A/AAAA records
   ; are still necessary
-  @         A      ${config.hosts.sea.ipv4}
-            AAAA   ${config.hosts.sea.ipv6}
+  @         A      ${config.this-host.ipv4}
+            AAAA   ${config.this-host.ipv6}
   bin       CNAME  snail
   blog      CNAME  snail
   click     CNAME  snail
