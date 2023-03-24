@@ -8,6 +8,7 @@
         "configs"
         "dnsdist"
         "firewall"
+        "nginx"
         "nix-gc"
         "powerdns"
         "tor"
@@ -23,6 +24,11 @@
       # there exists lib.concatMapAttrs but i want to take a list, not attrset
       forAllServicesFlat = f:
         lib.foldl lib.trivial.mergeAttrs { } (builtins.map f services);
+      parse-flake = flakeSrc:
+        let
+          flake = import (flakeSrc + "/flake.nix");
+          outputs = flake.outputs { self = outputs; };
+        in outputs;
     in {
 
       apps = forAllSystems (system:
@@ -42,14 +48,23 @@
 
       packages = forAllSystems (system:
         let
-          pkgs = import nixpkgs { inherit system; };
+          pkgs = nixpkgs.legacyPackages.${system};
+          nixpkgs-patched = pkgs.applyPatches {
+            name = "nixpkgs-patched";
+            src = nixpkgs;
+            patches = [ ./nixpkgs.patch ];
+          };
+          nixpkgs-patched-flake = parse-flake nixpkgs-patched;
+        in let
+          nixpkgs = nixpkgs-patched-flake;
+          pkgs = nixpkgs.legacyPackages.${system};
           selfpkgs = self.packages.${system};
         in (forAllServicesFlat (name:
           let
-            configuration = {
+            modules = [{
               imports = [ self.nixosModules.main self.nixosModules.${name} ];
-            };
-            nixos = import "${nixpkgs}/nixos" { inherit configuration system; };
+            }];
+            nixos = nixpkgs.lib.nixosSystem { inherit modules system; };
           in {
 
             "app-${name}" = pkgs.writeShellApplication {
@@ -82,7 +97,7 @@
               ${selfpkgs."packager-${name}"}/bin/${name}
             '';
 
-            "system-${name}" = nixos.system;
+            "system-${name}" = nixos.config.system.build.toplevel;
 
           })) // {
 

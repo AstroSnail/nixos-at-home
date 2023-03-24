@@ -15,7 +15,7 @@
       };
     }) [ 22 53 443 853 ] ++ [{
       port = 80;
-      target = { unix = "/var/lib/nginx/onion.socket"; };
+      target = { unix = "/run/nginx/onion.socket"; };
     }];
     secretKey =
       "/var/lib/tor/onion/astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion/hs_ed25519_secret_key";

@@ -58,7 +58,8 @@
 
 ## Thanks
 - [Me](https://github.com/AstroSnail). :P
-- [Nerath/lun\*](https://github.com/LunNova) for help figuring out the profile-setting.
+- [Nerath/lun\*](https://github.com/LunNova) for help on the profile-setting.
+- [Dusk](https://github.com/bb010g) for help on how to patch nixpkgs.
 
 ## Other useful commands
 - `sudo dpkg-divert --package service-firewall --divert /etc/nftables.conf.divert --rename --add /etc/nftables.conf`

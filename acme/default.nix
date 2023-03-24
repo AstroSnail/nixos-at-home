@@ -9,7 +9,7 @@
   security.acme.defaults.credentialsFile =
     pkgs.writeText "credentials.txt" "RFC2136_NAMESERVER=[::1]";
   security.acme.defaults.ocspMustStaple = true;
-  security.acme.defaults.reloadServices = [ "dnsdist.service" ];
+  security.acme.defaults.reloadServices = [ "dnsdist.service" "nginx.service" ];
   security.acme.certs.astrosnail = {
     domain = "astrosnail.pt.eu.org";
     extraDomainNames =

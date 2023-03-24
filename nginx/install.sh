@@ -1,8 +1,9 @@
 profile=${profile:?"'profile' variable missing!"}
 install_to=${install_to:?"'install_to' variable missing!"}
 
-service_file=/etc/systemd/system/tor.service
-service_link=/etc/systemd/system/multi-user.target.wants/tor.service
+service_file=/etc/systemd/system/nginx.service
+service_link=/etc/systemd/system/multi-user.target.wants/nginx.service
+logrotate_file=/etc/logrotate.d/nginx
 
 linky () {
   link_pointer=$1
@@ -18,18 +19,16 @@ linky_relative () {
 
 linky "${profile}${service_file}" "${install_to}${service_file}"
 linky_relative "${install_to}${service_link}"
+linky "${profile}${logrotate_file}" "${install_to}${logrotate_file}"
 
 cat >"${install_to}/DEBIAN/postinst" <<-'EOF'
 	#!/bin/sh
 	set -eu
 	case $1 in
 	  (configure)
-	    if ! getent passwd tor >/dev/null
-	    then adduser --system --home /var/lib/tor --group tor
-	    fi
-	    if getent group nginx >/dev/null &&
-	       ! getent group nginx | cut -d: -f4 | tr , \\n | grep -qx tor
-	    then adduser tor nginx
+	    if ! getent passwd nginx >/dev/null
+	    then
+	      adduser --system --group nginx
 	    fi
 	    ;;
 	  (abort-upgrade|abort-remove|abort-deconfigure)

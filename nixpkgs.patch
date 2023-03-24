@@ -1,0 +1,44 @@
+diff --git a/nixos/modules/services/web-servers/nginx/default.nix b/nixos/modules/services/web-servers/nginx/default.nix
+index 064c86a9a7e..560a97019bc 100644
+--- a/nixos/modules/services/web-servers/nginx/default.nix
++++ b/nixos/modules/services/web-servers/nginx/default.nix
+@@ -310,17 +310,20 @@ let
+             then filter (x: x.ssl) defaultListen
+             else defaultListen;
+ 
+-        listenString = { addr, port, ssl, extraParameters ? [], ... }:
+-          (if ssl && vhost.http3 then "
++        listenString = { addr, port, unix, ssl, extraParameters ? [], ... }:
++          let
++            listener =
++              if unix != null then "unix:${unix}" else "${addr}:${toString port}";
++          in (if ssl && vhost.http3 then "
+           # UDP listener for **QUIC+HTTP/3
+-          listen ${addr}:${toString port} http3 "
++          listen ${listener} http3 "
+           + optionalString vhost.default "default_server "
+           + optionalString vhost.reuseport "reuseport "
+           + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
+           + ";" else "")
+           + "
+ 
+-            listen ${addr}:${toString port} "
++            listen ${listener} "
+           + optionalString (ssl && vhost.http2) "http2 "
+           + optionalString ssl "ssl "
+           + optionalString vhost.default "default_server "
+diff --git a/nixos/modules/services/web-servers/nginx/vhost-options.nix b/nixos/modules/services/web-servers/nginx/vhost-options.nix
+index 089decb5f43..aa83ec1c061 100644
+--- a/nixos/modules/services/web-servers/nginx/vhost-options.nix
++++ b/nixos/modules/services/web-servers/nginx/vhost-options.nix
+@@ -28,8 +28,9 @@ with lib;
+ 
+     listen = mkOption {
+       type = with types; listOf (submodule { options = {
+-        addr = mkOption { type = str;  description = lib.mdDoc "IP address.";  };
++        addr = mkOption { type = nullOr str;  description = lib.mdDoc "IP address."; default = null;  };
+         port = mkOption { type = port;  description = lib.mdDoc "Port number."; default = 80; };
++        unix = mkOption { type = nullOr str; description = lib.mdDoc "Unix path."; default = null; };
+         ssl  = mkOption { type = bool; description = lib.mdDoc "Enable SSL.";  default = false; };
+         extraParameters = mkOption { type = listOf str; description = lib.mdDoc "Extra parameters of this listen directive."; default = []; example = [ "backlog=1024" "deferred" ]; };
+       }; });
