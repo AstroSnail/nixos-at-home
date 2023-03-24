@@ -22,6 +22,8 @@
     settings.HiddenServiceSingleHopMode = true;
   };
 
+  systemd.services.tor.serviceConfig.BindReadOnlyPaths = [ "/run/nginx/onion.socket" ];
+
   debianControl = ''
     Architecture: all
     Description: service-tor
