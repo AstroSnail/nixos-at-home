@@ -92,6 +92,9 @@ in ''
   ; are still necessary
   @         A      ${config.this-host.ipv4}
             AAAA   ${config.this-host.ipv6}
+  www       CNAME  sea
+  ; old services
+  ; might return? probably not, or differently
   bin       CNAME  snail
   blog      CNAME  snail
   click     CNAME  snail
@@ -100,7 +103,6 @@ in ''
   green     CNAME  snail
   minetest  CNAME  snail
   webgl     CNAME  snail
-  www       CNAME  snail
 
   ; experimental
   ; powerdns live-signing signs wildcards
