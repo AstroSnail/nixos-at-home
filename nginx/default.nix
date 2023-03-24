@@ -56,7 +56,7 @@
       add_header Onion-Location "http://www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion" always;
     '';
   in {
-    "*:@" = {
+    "@" = {
       serverName = "astrosnail.pt.eu.org";
       default = true;
       forceSSL = true;
@@ -65,45 +65,31 @@
       inherit sslCertificate sslCertificateKey;
       extraConfig = headers + inet-headers;
     };
-    "http:onion" = {
+    "onion" = {
       serverName =
         "astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
       default = true;
-      globalRedirect =
-        "www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
-      listen = listeners-onion;
-      extraConfig = headers;
-    };
-    "https:onion" = {
-      serverName =
-        "astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
-      default = true;
+      # don't force https
       addSSL = true;
-      globalRedirect =
-        "www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
-      listen = listeners-onion-https;
+      listen = listeners-onion ++ listeners-onion-https;
       inherit sslCertificate sslCertificateKey;
+      # globalRedirect always redirects to https if it's enabled
+      locations."/".return =
+        "301 $scheme://www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion$request_uri";
       extraConfig = headers;
     };
-    "*:www" = {
+    "www" = {
       serverName = "www.astrosnail.pt.eu.org";
       forceSSL = true;
       listen = listeners-addr;
       inherit locations sslCertificate sslCertificateKey;
       extraConfig = headers + inet-headers;
     };
-    "http:www.onion" = {
-      serverName =
-        "www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
-      listen = listeners-onion;
-      inherit locations;
-      extraConfig = headers;
-    };
-    "https:www.onion" = {
+    "www.onion" = {
       serverName =
         "www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
       addSSL = true;
-      listen = listeners-onion-https;
+      listen = listeners-onion ++ listeners-onion-https;
       inherit locations sslCertificate sslCertificateKey;
       extraConfig = headers;
     };
