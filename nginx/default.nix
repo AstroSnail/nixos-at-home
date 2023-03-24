@@ -44,6 +44,17 @@
     };
     sslCertificate = "/var/lib/acme/astrosnail/fullchain.pem";
     sslCertificateKey = "/var/lib/acme/astrosnail/key.pem";
+    headers = ''
+      add_header Content-Security-Policy "default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox; upgrade-insecure-requests" always;
+      add_header Referrer-Policy "no-referrer" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header X-Frame-Options "deny" always;
+      expires 1h;
+    '';
+    inet-headers = ''
+      add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+      add_header Onion-Location "http://www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion" always;
+    '';
   in {
     "*:@" = {
       serverName = "astrosnail.pt.eu.org";
@@ -52,6 +63,7 @@
       globalRedirect = "www.astrosnail.pt.eu.org";
       listen = listeners-addr;
       inherit sslCertificate sslCertificateKey;
+      extraConfig = headers + inet-headers;
     };
     "http:onion" = {
       serverName =
@@ -60,6 +72,7 @@
       globalRedirect =
         "www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
       listen = listeners-onion;
+      extraConfig = headers;
     };
     "https:onion" = {
       serverName =
@@ -70,22 +83,29 @@
         "www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
       listen = listeners-onion-https;
       inherit sslCertificate sslCertificateKey;
+      extraConfig = headers;
     };
-    # also https:www.onion
     "*:www" = {
       serverName = "www.astrosnail.pt.eu.org";
-      serverAliases = [
-        "www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion"
-      ];
       forceSSL = true;
-      listen = listeners-addr ++ listeners-onion-https;
+      listen = listeners-addr;
       inherit locations sslCertificate sslCertificateKey;
+      extraConfig = headers + inet-headers;
     };
     "http:www.onion" = {
       serverName =
         "www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
       listen = listeners-onion;
       inherit locations;
+      extraConfig = headers;
+    };
+    "https:www.onion" = {
+      serverName =
+        "www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
+      addSSL = true;
+      listen = listeners-onion-https;
+      inherit locations sslCertificate sslCertificateKey;
+      extraConfig = headers;
     };
   };
   services.nginx.appendHttpConfig = ''
