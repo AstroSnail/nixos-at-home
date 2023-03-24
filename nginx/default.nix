@@ -61,7 +61,7 @@
       serverName =
         "astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
       default = true;
-      listen = [{ unix = "/run/nginx/onion.socket"; }];
+      listen = [{ unix = "onion.socket"; }];
       inherit locations;
     };
   };

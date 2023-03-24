@@ -1,8 +1,8 @@
 diff --git a/nixos/modules/services/web-servers/nginx/default.nix b/nixos/modules/services/web-servers/nginx/default.nix
-index 064c86a9a7e..560a97019bc 100644
+index 064c86a9a7e..a429a6130a6 100644
 --- a/nixos/modules/services/web-servers/nginx/default.nix
 +++ b/nixos/modules/services/web-servers/nginx/default.nix
-@@ -310,17 +310,20 @@ let
+@@ -310,17 +310,22 @@ let
              then filter (x: x.ssl) defaultListen
              else defaultListen;
  
@@ -10,8 +10,10 @@ index 064c86a9a7e..560a97019bc 100644
 -          (if ssl && vhost.http3 then "
 +        listenString = { addr, port, unix, ssl, extraParameters ? [], ... }:
 +          let
-+            listener =
-+              if unix != null then "unix:${unix}" else "${addr}:${toString port}";
++            listener = if unix != null then
++              "unix:/run/nginx/${unix}"
++            else
++              "${addr}:${toString port}";
 +          in (if ssl && vhost.http3 then "
            # UDP listener for **QUIC+HTTP/3
 -          listen ${addr}:${toString port} http3 "
