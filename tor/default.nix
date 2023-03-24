@@ -13,17 +13,23 @@
         inherit port;
         addr = "[${config.this-host.ipv6}]";
       };
-    }) [ 22 53 443 853 ] ++ [{
-      port = 80;
-      target = { unix = "/run/nginx/onion.socket"; };
-    }];
+    }) [ 22 53 853 ] ++ [
+      {
+        port = 80;
+        target = { unix = "/run/nginx/onion.socket"; };
+      }
+      {
+        port = 443;
+        target = { unix = "/run/nginx/onion-https.socket"; };
+      }
+    ];
     secretKey =
       "/var/lib/tor/onion/astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion/hs_ed25519_secret_key";
     settings.HiddenServiceSingleHopMode = true;
   };
 
   systemd.services.tor.serviceConfig.BindReadOnlyPaths =
-    [ "/run/nginx/onion.socket" ];
+    [ "/run/nginx/onion.socket" "/run/nginx/onion-https.socket" ];
 
   debianControl = ''
     Architecture: all
