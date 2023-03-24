@@ -110,7 +110,12 @@
   systemd.services.nginx = {
     wants = [ "acme-finished-astrosnail.target" ];
     after = [ "acme-finished-astrosnail.target" ];
+    before = [ "tor.service" ];
     serviceConfig.SupplementaryGroups = "acme";
+    # tor bugs out about the sockets
+    postStart = ''
+      systemctl --no-block try-reload-or-restart tor.service || true
+    '';
   };
 
   debianControl = ''
