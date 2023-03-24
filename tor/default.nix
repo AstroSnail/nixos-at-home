@@ -28,8 +28,14 @@
     settings.HiddenServiceSingleHopMode = true;
   };
 
-  systemd.services.tor.serviceConfig.BindReadOnlyPaths =
-    [ "/run/nginx/onion.socket" "/run/nginx/onion-https.socket" ];
+  systemd.services.tor = {
+    # tor bugs whenever nginx restarts, needing a restart as well
+    # not ideal because tor can still be usefully up when nginx is down
+    # (e.g. ssh, dns over tcp/tls)
+    partOf = [ "nginx.service" ];
+    serviceConfig.BindReadOnlyPaths =
+      [ "/run/nginx/onion.socket" "/run/nginx/onion-https.socket" ];
+  };
 
   debianControl = ''
     Architecture: all
