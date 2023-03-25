@@ -9,10 +9,10 @@ let
       list = lib.concatMapStringsSep "," value-to-conf value;
     }.${builtins.typeOf value} or (builtins.toString value);
   gen-line = name: value: "${name}=${value-to-conf value}";
-  to-pdns-config = lib.flip lib.pipe [
+  gen-config = lib.flip lib.pipe [
     (lib.mapAttrs gen-line)
     lib.attrValues
     (lib.concatStringsSep "\n")
   ];
 
-in { lib.pdns.gen-config = to-pdns-config; }
+in { lib.pdns = { inherit gen-config; }; }
