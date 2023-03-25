@@ -1,25 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
-let
-  # this is a very cheap config-generator
-  # properly made, it should be a module with options
-  value-to-conf = value:
-    {
-      bool = if value then "yes" else "no";
-      list = lib.concatMapStringsSep "," value-to-conf value;
-    }.${builtins.typeOf value} or (builtins.toString value);
-  gen-line = name: value: "${name}=${value-to-conf value}";
-  to-pdns-config = lib.flip lib.pipe [
-    (lib.mapAttrs gen-line)
-    lib.attrValues
-    (lib.concatStringsSep "\n")
-  ];
-
-in {
-  imports = [ ./units.nix ];
+{
+  imports = [ ./gen-config.nix ./units.nix ];
 
   services.powerdns.enable = true;
-  services.powerdns.extraConfig = to-pdns-config {
+  services.powerdns.extraConfig = config.lib.pdns.gen-config {
     local-address = "[::1]";
     # alias is incompatible with live-signing
     #expand-alias = true;
