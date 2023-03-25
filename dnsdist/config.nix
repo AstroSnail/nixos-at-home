@@ -10,9 +10,9 @@
 
     addDOHLocal('[::1]')
 
-    certFile = '/var/lib/acme/astrosnail/fullchain.pem'
-    keyFile = '/var/lib/acme/astrosnail/key.pem'
-    options = {
+    local certFile = '/var/lib/acme/astrosnail/fullchain.pem'
+    local keyFile = '/var/lib/acme/astrosnail/key.pem'
+    local options = {
       ocspResponses = { '/var/lib/acme/astrosnail/ocsp.der' },
       minTLSVersion = 'tls1.3',
     }
@@ -39,9 +39,5 @@
     setACL({ '0.0.0.0/0', '::/0' })
 
     addAction(OpcodeRule(DNSOpcode.Update), RCodeAction(DNSRCode.NOTIMP))
-    -- add after 1.8.0
-    -- addAction(QTypeRule(DNSQType.ANY), )
-    -- TODO
-    -- addAction(QTypeRule(DNSQType.CERT), )
   '';
 }
