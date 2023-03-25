@@ -9,50 +9,55 @@ let
     "${email-local-dots}.${email-domain}.";
 
   key-to-zone = host: key: value:
-    if value == null then
-      ""
-    else
-      let
-        recordData = {
-          loc = {
-            prefix = "";
-            type = "LOC";
-            qvalue = value;
-          };
-          ipv4 = {
-            prefix = "";
-            type = "A";
-            qvalue = value;
-          };
-          ipv6 = {
-            prefix = "";
-            type = "AAAA";
-            qvalue = value;
-          };
-          wg-addr = {
-            prefix = "wireguard.";
-            type = "AAAA";
-            qvalue = value;
-          };
-          wg-pub = {
-            prefix = "wireguard.";
-            type = "TXT";
-            qvalue = ''"${value}"'';
-          };
-          yggd-addr = {
-            prefix = "yggdrasil.";
-            type = "AAAA";
-            qvalue = value;
-          };
-          yggd-pub = {
-            prefix = "yggdrasil.";
-            type = "TXT";
-            qvalue = ''"${value}"'';
-          };
+    let
+      recordData = {
+        ipv4 = {
+          prefix = "";
+          type = "A";
+          qvalue = value;
         };
-      in with recordData.${key}; ''
+        ipv6 = {
+          prefix = "";
+          type = "AAAA";
+          qvalue = value;
+        };
+        wg-addr = {
+          prefix = "wireguard.";
+          type = "AAAA";
+          qvalue = value;
+        };
+        wg-pub = {
+          prefix = "wireguard.";
+          type = "TXT";
+          qvalue = ''"${value}"'';
+        };
+        yggd-addr = {
+          prefix = "yggdrasil.";
+          type = "AAAA";
+          qvalue = value;
+        };
+        yggd-pub = {
+          prefix = "yggdrasil.";
+          type = "TXT";
+          qvalue = ''"${value}"'';
+        };
+        loc = {
+          prefix = "";
+          type = "LOC";
+          qvalue = value;
+        };
+        sshfp = {
+          prefix = "";
+          type = "SSHFP";
+          qvalue = value;
+        };
+      };
+    in if value != null && recordData ? ${key} then
+      with recordData.${key}; ''
         ${prefix}${host} ${type} ${qvalue}
-      '';
+      ''
+    else
+      "";
   host-to-zone = host: data:
     lib.concatStrings (lib.mapAttrsToList (key-to-zone host) data);
   hosts-to-zone = hosts:
@@ -62,17 +67,9 @@ in ''
   $ORIGIN astrosnail.pt.eu.org.
   $TTL 1h
 
-  ;                                 SERIAL REFRESH RETRY EXPIRE MINIMUM
+  ; info
+            ;                       SERIAL REFRESH RETRY EXPIRE MINIMUM
   @         SOA    sea ${email-soa} 0      3h      1h    1w     1h
-            ; if the nameservers change, i'll have to enter the nic.eu.org
-            ; control panel anyway to update their glue records, so linking the
-            ; hostnames directly in the NS records imposes no extra effort.
-            NS     sea
-            ; i don't have a second nameserver; use sea again.
-            ; (but under a different name)
-            ; dns specifically is hard to host at home, so i won't.
-            NS     vps-04b3828b.vps.ovh.net.
-            ; info
             CAA    128 issue        "letsencrypt.org; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1001995317; validationmethods=dns-01"
             CAA      0 issuewild    ";"
             CAA      0 iodef        "mailto:${config.email}"
@@ -88,21 +85,21 @@ in ''
   ${hosts-to-zone config.hosts}
 
   ; services
-  ; as long as ALIAS/ANAME still isn't a thing, a couple extra A/AAAA records
-  ; are still necessary
+  _http._tcp   SRV  0 0 80 sea
+  _https._tcp  SRV  0 0 443 sea
+            ; as long as ALIAS/ANAME still isn't a thing, and as long as web
+            ; browsers don't support alternative service specifications, a
+            ; couple extra A/AAAA records are still necessary
   @         A      ${config.this-host.ipv4}
             AAAA   ${config.this-host.ipv6}
-  www       CNAME  sea
-  ; old services
-  ; might return? probably not, or differently
-  bin       CNAME  snail
-  blog      CNAME  snail
-  click     CNAME  snail
-  css       CNAME  snail
-  git       CNAME  snail
-  green     CNAME  snail
-  minetest  CNAME  snail
-  webgl     CNAME  snail
+            ; if the nameservers change, i'll have to enter the nic.eu.org
+            ; control panel anyway to update their glue records, so linking the
+            ; hostnames directly in the NS records imposes no extra effort.
+            ; i don't have a second nameserver; use sea again.
+            ; (but under a different name)
+            ; dns specifically is hard to host at home, so i won't.
+            NS     sea
+            NS     vps-04b3828b.vps.ovh.net.
 
   ; experimental
   ; powerdns live-signing signs wildcards

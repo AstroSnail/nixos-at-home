@@ -40,7 +40,7 @@
     '';
     headers-inet = ''
       add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
-      add_header Onion-Location "http://www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion" always;
+      add_header Onion-Location "http://astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion" always;
     '';
 
   in {
@@ -48,9 +48,8 @@
       serverName = "astrosnail.pt.eu.org";
       default = true;
       forceSSL = true;
-      globalRedirect = "www.astrosnail.pt.eu.org";
       listen = listeners-addr;
-      inherit sslCertificate sslCertificateKey;
+      inherit locations sslCertificate sslCertificateKey;
       extraConfig = headers + headers-inet;
     };
     "onion" = {
@@ -58,24 +57,6 @@
         "astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
       default = true;
       # don't force https
-      addSSL = true;
-      listen = listeners-onion ++ listeners-onion-https;
-      inherit sslCertificate sslCertificateKey;
-      # globalRedirect always redirects to https if it's enabled
-      locations."/".return =
-        "301 $scheme://www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion$request_uri";
-      extraConfig = headers;
-    };
-    "www" = {
-      serverName = "www.astrosnail.pt.eu.org";
-      forceSSL = true;
-      listen = listeners-addr;
-      inherit locations sslCertificate sslCertificateKey;
-      extraConfig = headers + headers-inet;
-    };
-    "www.onion" = {
-      serverName =
-        "www.astroslomofimguyolej7mlaofxbmczuwepljo5h5vjldxmy3me6mjid.onion";
       addSSL = true;
       listen = listeners-onion ++ listeners-onion-https;
       inherit locations sslCertificate sslCertificateKey;

@@ -12,8 +12,7 @@
   security.acme.defaults.reloadServices = [ "dnsdist.service" "nginx.service" ];
   security.acme.certs.astrosnail = {
     domain = "astrosnail.pt.eu.org";
-    extraDomainNames =
-      [ "sea.astrosnail.pt.eu.org" "www.astrosnail.pt.eu.org" ];
+    extraDomainNames = [ "sea.astrosnail.pt.eu.org" ];
   };
 
   debianControl = ''
