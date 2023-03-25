@@ -37,5 +37,11 @@
     })
 
     setACL({ '0.0.0.0/0', '::/0' })
+
+    addAction(OpcodeRule(DNSOpcode.Update), RCodeAction(DNSRCode.NOTIMP))
+    -- add after 1.8.0
+    -- addAction(QTypeRule(DNSQType.ANY), )
+    -- TODO
+    -- addAction(QTypeRule(DNSQType.CERT), )
   '';
 }
