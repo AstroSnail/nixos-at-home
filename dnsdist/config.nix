@@ -38,6 +38,6 @@
 
     setACL({ '0.0.0.0/0', '::/0' })
 
-    addAction(OpcodeRule(DNSOpcode.Update), RCodeAction(DNSRCode.NOTIMP))
+    addAction(OpcodeRule(DNSOpcode.Update), RCodeAction(DNSRCode.NOTIMP, { ra = false }))
   '';
 }
