@@ -5,9 +5,10 @@
 
   security.acme.acceptTerms = true;
   security.acme.defaults.email = config.email;
+  security.acme.defaults.dnsPropagationCheck = false; # buggy fsr
   security.acme.defaults.dnsProvider = "rfc2136";
   security.acme.defaults.credentialsFile =
-    pkgs.writeText "credentials.txt" "RFC2136_NAMESERVER=[::1]";
+    pkgs.writeText "credentials.txt" "RFC2136_NAMESERVER=[::1]:53";
   security.acme.defaults.ocspMustStaple = true;
   security.acme.defaults.reloadServices = [ "dnsdist.service" "nginx.service" ];
   security.acme.certs.astrosnail = {
