@@ -19,11 +19,11 @@
         allowedIPs = [ "${config.hosts.sea.wg-addr}/128" ];
         endpoint = "[${config.hosts.sea.yggd-addr}]:51820";
       }
-      { # smol
-        publicKey = config.hosts.smol.wg-pub;
-        allowedIPs = [ "${config.hosts.smol.wg-addr}/128" ];
-        #endpoint = "[${config.hosts.smol.yggd-addr}]:51820";
-      }
+      #{ # smol
+      #  publicKey = config.hosts.smol.wg-pub;
+      #  allowedIPs = [ "${config.hosts.smol.wg-addr}/128" ];
+      #  endpoint = "[${config.hosts.smol.yggd-addr}]:51820";
+      #}
       { # sonar
         publicKey = config.hosts.sonar.wg-pub;
         allowedIPs = [ "${config.hosts.sonar.wg-addr}/128" ];

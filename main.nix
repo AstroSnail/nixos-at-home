@@ -49,13 +49,14 @@
     # TODO: separate and link in, as this is very generally useful
     email = "astrosnail@protonmail.com";
     hosts = {
-      snail = {
-        #ipv4 = "94.60.30.250";
-        ipv6 = "2001:818:df73:f400:c0ff:eeba:d7ea:900d";
-        wg-addr = "fd57:337f:9040:1:1:1:1:1";
-        #wg-pub = "Rc7Ft6ljK9pyRmrwzQmfsIEIpqsTpCu+1hlAaTfDyzc=";
-        #sshfp = "";
-      };
+      # retired
+      #snail = {
+      #  ipv4 = "94.60.30.250";
+      #  ipv6 = "2001:818:df73:f400:c0ff:eeba:d7ea:900d";
+      #  wg-addr = "fd57:337f:9040:1:1:1:1:1";
+      #  wg-pub = "Rc7Ft6ljK9pyRmrwzQmfsIEIpqsTpCu+1hlAaTfDyzc=";
+      #  sshfp = "";
+      #};
 
       soon = {
         ipv4 = "94.60.30.250";
@@ -86,10 +87,11 @@
       };
 
       smol = {
-        wg-addr = "fd57:337f:9040:1:1:1:1:2";
-        wg-pub = "Lp5hmSdapd8LPYpdLb2+8eBKq3mV6PO7gi2VIVv3d2s=";
-        #yggd-addr = "";
-        #yggd-pub = "";
+        #wg-addr = "fd57:337f:9040:1:1:1:1:2";
+        #wg-pub = "Lp5hmSdapd8LPYpdLb2+8eBKq3mV6PO7gi2VIVv3d2s=";
+        yggd-addr = "204:3e20:38b0:d4fc:c1db:8a4c:cf17:424d";
+        yggd-pub =
+          "0e0efe3a795819f123ad998745ed92b28b909eff789546e720617c5ca6039f95";
         #sshfp = "";
       };
 
