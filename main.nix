@@ -95,13 +95,14 @@
         #sshfp = "";
       };
 
-      sonar = {
-        wg-addr = "fd57:337f:9040:1:9ca7:9ca7:9ca7:9ca7";
-        wg-pub = "spQBkQX/+mB1MmVvDnjs1IEHInDKOxPMjhgs0OyJCi8=";
-        yggd-addr = "202:2d0d:edc4:38af:ccb9:efb6:59de:421d";
-        yggd-pub =
-          "3a5e424778ea0668c20934c437bc5a4461bee610fbc60821c363558b1fbb0fed";
-      };
+      # retired
+      #sonar = {
+      #  wg-addr = "fd57:337f:9040:1:9ca7:9ca7:9ca7:9ca7";
+      #  wg-pub = "spQBkQX/+mB1MmVvDnjs1IEHInDKOxPMjhgs0OyJCi8=";
+      #  yggd-addr = "202:2d0d:edc4:38af:ccb9:efb6:59de:421d";
+      #  yggd-pub =
+      #    "3a5e424778ea0668c20934c437bc5a4461bee610fbc60821c363558b1fbb0fed";
+      #};
 
       soon-prime = {
         wg-addr = "fd57:337f:9040:1:5:4:3:2";
@@ -111,6 +112,14 @@
           "eaa4fee18f61d37eda21da80d7b199cd1478dbb5a4cf1d45869b5189bbb83896";
         sshfp =
           "4 2 17e13bf0ed8a0d7a9f492c4d5cd5825d3cee65d5747e7b2bd7580057faec48c0";
+      };
+
+      shinx = {
+        #wg-addr = "";
+        #wg-pub = "";
+        yggd-addr = "200:2853:f73e:b83a:4275:16bf:208:abe4";
+        yggd-pub =
+          "ebd60460a3e2dec574a07efbaa0db3d640e8c80da7321dcd2585b2ad6d1571e9";
       };
     };
     this-host = config.hosts.sea;

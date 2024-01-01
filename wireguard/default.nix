@@ -24,11 +24,6 @@
       #  allowedIPs = [ "${config.hosts.smol.wg-addr}/128" ];
       #  endpoint = "[${config.hosts.smol.yggd-addr}]:51820";
       #}
-      { # sonar
-        publicKey = config.hosts.sonar.wg-pub;
-        allowedIPs = [ "${config.hosts.sonar.wg-addr}/128" ];
-        #endpoint = "[${config.hosts.sonar.yggd-addr}]:51820";
-      }
       { # soon-prime
         publicKey = config.hosts.soon-prime.wg-pub;
         allowedIPs = [ "${config.hosts.soon-prime.wg-addr}/128" ];

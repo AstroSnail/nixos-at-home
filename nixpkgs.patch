@@ -1,46 +1,54 @@
 diff --git a/nixos/modules/services/web-servers/nginx/default.nix b/nixos/modules/services/web-servers/nginx/default.nix
-index 064c86a9a7e..a429a6130a6 100644
+index cf70dc325945..550a79421c91 100644
 --- a/nixos/modules/services/web-servers/nginx/default.nix
 +++ b/nixos/modules/services/web-servers/nginx/default.nix
-@@ -310,17 +310,22 @@ let
+@@ -327,10 +327,11 @@ let
              then filter (x: x.ssl) defaultListen
              else defaultListen;
  
--        listenString = { addr, port, ssl, extraParameters ? [], ... }:
--          (if ssl && vhost.http3 then "
-+        listenString = { addr, port, unix, ssl, extraParameters ? [], ... }:
-+          let
-+            listener = if unix != null then
-+              "unix:/run/nginx/${unix}"
-+            else
-+              "${addr}:${toString port}";
-+          in (if ssl && vhost.http3 then "
-           # UDP listener for **QUIC+HTTP/3
--          listen ${addr}:${toString port} http3 "
-+          listen ${listener} http3 "
+-        listenString = { addr, port, ssl, proxyProtocol ? false, extraParameters ? [], ... }:
++        listenString = { addr, port, unix, ssl, proxyProtocol ? false, extraParameters ? [], ... }:
++        let listener = if unix != null then "unix:/run/nginx/${unix}" else "${addr}${optionalString (port != null) ":${toString port}"}"; in
+           # UDP listener for QUIC transport protocol.
+           (optionalString (ssl && vhost.quic) ("
+-            listen ${addr}${optionalString (port != null) ":${toString port}"} quic "
++            listen ${listener} quic "
            + optionalString vhost.default "default_server "
            + optionalString vhost.reuseport "reuseport "
-           + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
-           + ";" else "")
+           + optionalString (extraParameters != []) (concatStringsSep " "
+@@ -339,7 +340,7 @@ let
+             in filter isCompatibleParameter extraParameters))
+           + ";"))
            + "
- 
--            listen ${addr}:${toString port} "
+-            listen ${addr}${optionalString (port != null) ":${toString port}"} "
 +            listen ${listener} "
-           + optionalString (ssl && vhost.http2) "http2 "
+           + optionalString (ssl && vhost.http2 && oldHTTP2) "http2 "
            + optionalString ssl "ssl "
            + optionalString vhost.default "default_server "
 diff --git a/nixos/modules/services/web-servers/nginx/vhost-options.nix b/nixos/modules/services/web-servers/nginx/vhost-options.nix
-index 089decb5f43..aa83ec1c061 100644
+index 9db4c8e23025..c8b22d69d025 100644
 --- a/nixos/modules/services/web-servers/nginx/vhost-options.nix
 +++ b/nixos/modules/services/web-servers/nginx/vhost-options.nix
-@@ -28,8 +28,9 @@ with lib;
- 
-     listen = mkOption {
-       type = with types; listOf (submodule { options = {
--        addr = mkOption { type = str;  description = lib.mdDoc "IP address.";  };
-+        addr = mkOption { type = nullOr str;  description = lib.mdDoc "IP address."; default = null;  };
-         port = mkOption { type = port;  description = lib.mdDoc "Port number."; default = 80; };
-+        unix = mkOption { type = nullOr str; description = lib.mdDoc "Unix path."; default = null; };
-         ssl  = mkOption { type = bool; description = lib.mdDoc "Enable SSL.";  default = false; };
-         extraParameters = mkOption { type = listOf str; description = lib.mdDoc "Extra parameters of this listen directive."; default = []; example = [ "backlog=1024" "deferred" ]; };
-       }; });
+@@ -30,8 +30,9 @@ with lib;
+       type = with types; listOf (submodule {
+         options = {
+           addr = mkOption {
+-            type = str;
++            type = nullOr str;
+             description = lib.mdDoc "Listen address.";
++            default = null;
+           };
+           port = mkOption {
+             type = types.nullOr port;
+@@ -41,6 +42,11 @@ with lib;
+             '';
+             default = null;
+           };
++          unix = mkOption {
++            type = nullOr str;
++            description = lib.mdDoc "Unix path.";
++            default = null;
++          };
+           ssl = mkOption {
+             type = bool;
+             description = lib.mdDoc "Enable SSL.";

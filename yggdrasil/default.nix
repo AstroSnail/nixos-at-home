@@ -13,8 +13,8 @@
       config.hosts.soon.yggd-pub
       config.hosts.sea.yggd-pub
       config.hosts.smol.yggd-pub
-      config.hosts.sonar.yggd-pub
       config.hosts.soon-prime.yggd-pub
+      config.hosts.shinx.yggd-pub
     ];
     Peers = [
       "tcp://${config.hosts.soon.ipv4}:123"
