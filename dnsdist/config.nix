@@ -1,6 +1,5 @@
 { config, ... }:
 
-# switch config when dnsdist hits 1.8.0
 {
   services.dnsdist.listenAddress = config.this-host.ipv4;
   services.dnsdist.extraConfig = ''
@@ -15,25 +14,19 @@
     local options = {
       ocspResponses = { '/var/lib/acme/astrosnail/ocsp.der' },
       minTLSVersion = 'tls1.3',
+      additionalAddresses = {
+        -- dnsdist is buggy and needs ports here
+        '[${config.this-host.ipv6}]:853',
+        '[${config.this-host.wg-addr}]:853',
+        '[${config.this-host.yggd-addr}]:853',
+      },
     }
-
-    if false then
-      options.additionalAddresses = {
-        '[${config.this-host.ipv6}]',
-        '[${config.this-host.wg-addr}]',
-        '[${config.this-host.yggd-addr}]',
-      }
-      addTLSLocal('${config.this-host.ipv4}', certFile, keyFile, options)
-    else
-      addTLSLocal('${config.this-host.ipv4}', certFile, keyFile, options)
-      addTLSLocal('[${config.this-host.ipv6}]', certFile, keyFile, options)
-      addTLSLocal('[${config.this-host.wg-addr}]', certFile, keyFile, options)
-      addTLSLocal('[${config.this-host.yggd-addr}]', certFile, keyFile, options)
-    end
+    addTLSLocal('${config.this-host.ipv4}', certFile, keyFile, options)
 
     newServer({
       address = '[::1]',
-      checkName = 'sea.astrosnail.pt.eu.org',
+      checkName = 'astrosnail.pt.eu.org',
+      checkType = 'SOA',
     })
 
     setACL({ '0.0.0.0/0', '::/0' })

@@ -1,3 +1,2 @@
-automate wireguard and yggdrasil hosts
 fix acme and firewall
-goto summit
+goto sunrise

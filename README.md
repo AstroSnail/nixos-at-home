@@ -25,6 +25,8 @@
   so reinstalling the package isn't necessary (unless there are new files).
 
 ## Usage examples
+- `nix run .#yggdrasil profile` to print the profile where the service will be
+  installed.
 - `nix run .#yggdrasil update` to add/update the yggdrasil service in the
   current user's profile directory.
 - `sudo nix run .#yggdrasil update` to do this on the root user's profile
@@ -33,7 +35,8 @@
     user's profile directory, but if you're not using a package for a
     particular module then you can link it to your own user's profile and
     figure it out yourself.
-- `sudo nix run .#yggdrasil env <whatever>` to run `nix-env` on the profile.
+- `sudo nix run .#yggdrasil history` to see the profile history,
+  `sudo nix run .#yggdrasil rollback --to 123` to switch to another version.
 - `sudo nix run .#yggdrasil help` to see a summary of things you can do.
 - `nix build .#package-yggdrasil` to get a Debian/Ubuntu package containing the
   symlinks to the service's profile.
@@ -53,7 +56,7 @@
   `debianControl` attribute containing text for a Debian package control file,
   and an `installScript` attribute containing the package install script to
   create the package.
-- Add `"foobar"` to the services in `flake.nix` (under line 6 at this time).
+- Add `"foobar"` to the services in `flake.nix` (under line 8 at this time).
 - :tada:
 
 ## Thanks

@@ -67,7 +67,7 @@
         yggd-pub =
           "cc407aa1e3fa49c3c6251c689f066afac7e0f8b4cf5744e0cd18446cf32fe51f";
         # Portugal (centered at the Picoto da Melriça)
-        loc = "39 41 40 N 8 7 50 W 592m 1m 600000m 2000m";
+        loc = "39 41 40 N 8 7 50 W 592m 10m 600000m 2000m";
         sshfp =
           "4 2 e3cde17417165ec78a4f26f2438ce43b142d9d87ef594e73171269b01d1a8632";
       };
@@ -81,7 +81,7 @@
         yggd-pub =
           "010dfebad3b4649b587501b9dfe1219411bfb413d5a3cd499be2fe1aa64676f3";
         # OVHcloud Gravelines
-        loc = "51 1 0 N 2 9 20 E 10m 1m 1000m 20m";
+        loc = "51 1 0 N 2 9 20 E 0m 200m 1000m 20m";
         sshfp =
           "4 2 8541fb35fc4db160d2836bf49f5e239c9f5869037c4851777f72d51704e5655f";
       };
@@ -122,7 +122,7 @@
           "ebd60460a3e2dec574a07efbaa0db3d640e8c80da7321dcd2585b2ad6d1571e9";
       };
     };
-    this-host = config.hosts.sea;
+    this-host = config.hosts.${config.networking.hostName};
   };
 
 }

@@ -27,8 +27,7 @@ cat >"${install_to}/DEBIAN/postinst" <<-'EOF'
 	case $1 in
 	  (configure)
 	    if ! getent passwd nginx >/dev/null
-	    then
-	      adduser --system --group nginx
+	    then adduser --system --group nginx
 	    fi
 	    ;;
 	  (abort-upgrade|abort-remove|abort-deconfigure)

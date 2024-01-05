@@ -1,26 +1,35 @@
-command=${1:-help}
-shift
+command=${1-help}
+shift $(( !! $# ))
 
+self=${self:?"'self' variable missing!"}
 name=${name:?"'name' variable missing!"}
-derivation=${derivation:?"'derivation' variable missing!"}
 
 profile=/nix/var/nix/profiles/per-user/${USER}/${name}
+derivation=${self}#system-${name}
 
 run_help () {
   echo "Examples:"
   echo "  help"
+  echo "  profile"
   echo "  update"
-  echo "  env --list-generations"
-  echo "  env --switch-generation 42"
-  echo "  env --rollback"
+  echo "  history"
+  echo "  rollback --to 123"
+}
+
+run_profile () {
+  echo "${profile}"
 }
 
 run_update () {
-  nix-env --profile "${profile}" --set "${derivation}"
+  nix build --profile "${profile}" "${derivation}"
 }
 
-run_env () {
-  nix-env --profile "${profile}" "$@"
+run_history () {
+  nix profile history --profile "${profile}"
+}
+
+run_rollback () {
+  nix profile rollback --profile "${profile}" "$@"
 }
 
 "run_${command}" "$@"

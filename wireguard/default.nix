@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 {
   imports = [ ./install.nix ];
@@ -7,29 +7,12 @@
     generatePrivateKeyFile = true;
     privateKeyFile = "/var/lib/wireguard/key";
     listenPort = 51820;
-    # TODO: filter on this-host
-    peers = [
-      { # soon
-        publicKey = config.hosts.soon.wg-pub;
-        allowedIPs = [ "${config.hosts.soon.wg-addr}/128" ];
-        endpoint = "[${config.hosts.soon.yggd-addr}]:51820";
-      }
-      { # sea
-        publicKey = config.hosts.sea.wg-pub;
-        allowedIPs = [ "${config.hosts.sea.wg-addr}/128" ];
-        endpoint = "[${config.hosts.sea.yggd-addr}]:51820";
-      }
-      #{ # smol
-      #  publicKey = config.hosts.smol.wg-pub;
-      #  allowedIPs = [ "${config.hosts.smol.wg-addr}/128" ];
-      #  endpoint = "[${config.hosts.smol.yggd-addr}]:51820";
-      #}
-      { # soon-prime
-        publicKey = config.hosts.soon-prime.wg-pub;
-        allowedIPs = [ "${config.hosts.soon-prime.wg-addr}/128" ];
-        endpoint = "[${config.hosts.soon-prime.yggd-addr}]:51820";
-      }
-    ];
+    peers = lib.concatMap (host:
+      lib.optional (host != config.this-host && host.wg-pub != null) {
+        publicKey = host.wg-pub;
+        allowedIPs = [ "${host.wg-addr}/128" ];
+        endpoint = "[${host.yggd-addr}]:51820";
+      }) (lib.attrValues config.hosts);
     ips = [ "${config.this-host.wg-addr}/64" ];
   };
 

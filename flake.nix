@@ -1,9 +1,7 @@
 {
   description = "Services flake";
 
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
-  };
+  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11"; };
 
   outputs = { self, nixpkgs }:
     let
@@ -21,18 +19,21 @@
         "yggdrasil"
       ];
       supportedSystems = [ "x86_64-linux" ];
+
       lib = nixpkgs.lib;
       forAllSystems = lib.genAttrs supportedSystems;
       forAllServices = lib.genAttrs services;
       # does there not exist a concat-map for attribute sets?
       # there exists lib.concatMapAttrs but i want to take a list, not attrset
       forAllServicesFlat = f:
-        lib.foldl lib.trivial.mergeAttrs { } (builtins.map f services);
+        lib.foldl lib.trivial.mergeAttrs { } (lib.lists.map f services);
+
       parse-flake = flakeSrc:
         let
           flake = import (flakeSrc + "/flake.nix");
           outputs = flake.outputs { self = outputs; };
         in outputs;
+
     in {
 
       apps = forAllSystems (system:
@@ -62,57 +63,65 @@
         in let
           nixpkgs = nixpkgs-patched-flake;
           pkgs = nixpkgs.legacyPackages.${system};
-          selfpkgs = self.packages.${system};
+
+          devShell = pkgs.mkShell { buildInputs = [ pkgs.shellcheck ]; };
+
+          formatter = pkgs.writeShellApplication {
+            name = "formatter";
+            runtimeInputs = [ pkgs.fd pkgs.nixfmt ];
+            text = "fd --type=file --extension=nix --exec-batch nixfmt --";
+          };
+
         in (forAllServicesFlat (name:
           let
             modules = [{
               imports = [ self.nixosModules.main self.nixosModules.${name} ];
             }];
-            nixos = nixpkgs.lib.nixosSystem { inherit modules system; };
-          in {
 
-            "app-${name}" = pkgs.writeShellApplication {
+            nixos = nixpkgs.lib.nixosSystem { inherit modules system; };
+
+            app = pkgs.writeShellApplication {
               inherit name;
               runtimeInputs = [ pkgs.nix ];
               text = ''
+                self=${self}
                 name=${name}
-                derivation=${selfpkgs."system-${name}"}
               '' + (lib.readFile "${self}/profile.sh");
             };
 
-            "control-${name}" =
+            control =
               pkgs.writeText "control-${name}" nixos.config.debianControl;
-            "install-${name}" = pkgs.writeShellApplication {
+
+            install = pkgs.writeShellApplication {
               inherit name;
               text = nixos.config.installScript;
             };
 
-            "packager-${name}" = pkgs.writeShellApplication {
+            packager = pkgs.writeShellApplication {
               inherit name;
               runtimeInputs = [ pkgs.dpkg ];
               text = ''
                 name=${name}
-                control=${selfpkgs."control-${name}"}
-                install=${selfpkgs."install-${name}"}/bin/${name}
+                control=${control}
+                install=${install}/bin/${name}
               '' + (lib.readFile "${self}/packager.sh");
             };
 
-            "package-${name}" = pkgs.runCommand "package-${name}" { } ''
-              ${selfpkgs."packager-${name}"}/bin/${name}
+            package = pkgs.runCommand "package-${name}" { } ''
+              ${packager}/bin/${name}
             '';
 
-            "system-${name}" = nixos.config.system.build.toplevel;
+            nixos-system = nixos.config.system.build.toplevel;
 
+          in {
+            "app-${name}" = app;
+            "control-${name}" = control;
+            "install-${name}" = install;
+            "packager-${name}" = packager;
+            "package-${name}" = package;
+            "system-${name}" = nixos-system;
           })) // {
-
-            devShell = pkgs.mkShell { buildInputs = [ pkgs.shellcheck ]; };
-
-            formatter = pkgs.writeShellApplication {
-              name = "formatter";
-              runtimeInputs = [ pkgs.fd pkgs.nixfmt ];
-              text = "fd --type=file --extension=nix --exec-batch nixfmt --";
-            };
-
+            inherit devShell formatter;
           });
 
     };

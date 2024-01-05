@@ -45,12 +45,10 @@ let
           qvalue = value;
         };
       };
-    in if value != null && recordData ? ${key} then
-      with recordData.${key}; ''
-        ${prefix}${host} ${type} ${qvalue}
-      ''
-    else
-      "";
+    in lib.optionalString (value != null && recordData ? ${key})
+    (with recordData.${key}; ''
+      ${prefix}${host} ${type} ${qvalue}
+    '');
   host-to-zone = host: data:
     lib.concatStrings (lib.mapAttrsToList (key-to-zone host) data);
   hosts-to-zone = hosts:
