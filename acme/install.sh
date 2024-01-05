@@ -4,7 +4,9 @@ profile=${profile:?"'profile' variable missing!"}
 install_to=${install_to:?"'install_to' variable missing!"}
 
 fixperms_service_file=/etc/systemd/system/acme-fixperms.service
+lockfiles_service_file=/etc/systemd/system/acme-lockfiles.service
 selfca_service_file=/etc/systemd/system/acme-selfsigned-ca.service
+tmpfiles_file=/etc/tmpfiles.d/00-acme.conf
 
 set_cert_vars () {
   service_file=/etc/systemd/system/acme-${cert}.service
@@ -48,7 +50,9 @@ linky_relative () {
 }
 
 linky "${profile}${fixperms_service_file}" "${install_to}${fixperms_service_file}"
+linky "${profile}${lockfiles_service_file}" "${install_to}${lockfiles_service_file}"
 linky "${profile}${selfca_service_file}" "${install_to}${selfca_service_file}"
+linky "${profile}${tmpfiles_file}" "${install_to}${tmpfiles_file}"
 
 set -- ###CERTS###
 for cert
