@@ -3,6 +3,7 @@
 {
   boot.modprobeConfig.enable = lib.mkForce true;
   networking.nftables.enable = true;
+  networking.nftables.flushRuleset = true;
   # Reduce logspam
   networking.firewall.logRefusedConnections = false;
   networking.firewall.rejectPackets = true;
@@ -12,7 +13,8 @@
   networking.firewall.interfaces.ens3.allowedTCPPorts = [ 123 ];
 
   environment.etc."nftables.conf".source =
-    config.systemd.services.nftables.serviceConfig.ExecStart;
+    let starts = config.systemd.services.nftables.serviceConfig.ExecStart;
+    in assert (lib.length starts) == 2; lib.elemAt starts 1;
 
   debianControl = ''
     Architecture: all

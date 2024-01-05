@@ -1,2 +1,2 @@
-fix acme and firewall
+fix acme
 goto sunrise
