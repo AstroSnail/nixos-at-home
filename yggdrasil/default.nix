@@ -16,6 +16,7 @@
         "tcp://[${host.ipv6}]:123"
       ]) [ config.hosts.soon config.hosts.sea ];
     NodeInfo = { name = config.networking.fqdnOrHostName; };
+    MulticastInterfaces = [ ];
   };
 
   systemd.services.yggdrasil.requires = [ "yggdrasil-activation.service" ];
