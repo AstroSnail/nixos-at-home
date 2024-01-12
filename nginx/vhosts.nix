@@ -19,9 +19,9 @@
         ssl = true;
       }
     ]) listen-addrs;
-    listeners-onion = [{ unix = "onion.socket"; }];
+    listeners-onion = [{ addr = "unix:/run/nginx/onion.socket"; }];
     listeners-onion-https = [{
-      unix = "onion-https.socket";
+      addr = "unix:/run/nginx/onion-https.socket";
       ssl = true;
     }];
     sslCertificate = "/var/lib/acme/astrosnail/fullchain.pem";

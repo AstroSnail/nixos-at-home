@@ -12,6 +12,7 @@
   services.nginx.recommendedOptimisation = true;
   services.nginx.recommendedProxySettings = true;
   services.nginx.recommendedTlsSettings = true;
+  services.nginx.recommendedZstdSettings = true;
   services.nginx.serverNamesHashBucketSize = 128;
   services.nginx.serverTokens = true;
   #services.nginx.sslCiphers = "";
@@ -34,6 +35,10 @@
         fi
       endscript
     }
+  '';
+
+  environment.etc."tmpfiles.d/00-nginx.conf".text = ''
+    X /tmp/systemd-private-%b-nginx.service-*/tmp/nginx_*
   '';
 
   systemd.services.nginx = {
