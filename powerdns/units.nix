@@ -155,5 +155,12 @@ in {
       "pdns-rollover-ksk-phase1.timer"
       "pdns-rollover-ksk-phase2.timer"
     ];
+    after = [
+      "pdns-rollover-zsk-phase1.timer"
+      "pdns-rollover-zsk-phase2.timer"
+      "pdns-rollover-zsk-phase3.timer"
+      "pdns-rollover-ksk-phase1.timer"
+      "pdns-rollover-ksk-phase2.timer"
+    ];
   };
 }
