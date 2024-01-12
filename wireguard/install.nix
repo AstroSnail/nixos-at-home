@@ -6,14 +6,9 @@
     interfaces = lib.attrNames config.networking.wireguard.interfaces;
     interfaces-str = lib.concatStringsSep " " interfaces;
 
-    peers-of-iface = { peers, ... }:
-      builtins.map (peer:
-        lib.replaceStrings [ "+" "/" "=" ] [ "\\x2b" "-" "\\x3d" ]
-        peer.publicKey) peers;
-    peers-of-iface-str = data: lib.concatStringsSep " " (peers-of-iface data);
-
+    peers-str = peers: lib.concatStringsSep " " (lib.catAttrs "name" peers);
     iface2peers = lib.mapAttrsToList
-      (iface: data: "    (${iface}) peers='${peers-of-iface-str data}';;")
+      (iface: data: "    (${iface}) peers='${peers-str data.peers}';;")
       config.networking.wireguard.interfaces;
     iface2peers-str = lib.concatStringsSep "\n" iface2peers;
 
