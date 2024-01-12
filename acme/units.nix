@@ -1,15 +1,15 @@
 { config, lib, pkgs, ... }:
 
 {
-  systemd.services.acme-astrosnail.wants = [ "acme-ocsp-astrosnail.service" ];
   systemd.targets.acme-finished-astrosnail.requires =
     [ "acme-ocsp-astrosnail.service" ];
   systemd.targets.acme-finished-astrosnail.after =
     [ "acme-ocsp-astrosnail.service" ];
+  systemd.timers.acme-astrosnail.timerConfig.Unit =
+    lib.mkForce "acme-finished-astrosnail.target";
 
   systemd.services.acme-ocsp-astrosnail = {
     description = "OCSP response fetcher for astrosnail";
-    wants = [ "acme-astrosnail.service" ];
     after = [ "acme-astrosnail.service" ];
     path = [ pkgs.openssl ];
     unitConfig.ConditionPathExists = [
@@ -28,12 +28,5 @@
         lib.escapeShellArgs config.security.acme.certs.astrosnail.reloadServices
       }
     '';
-  };
-
-  systemd.timers.acme-ocsp-astrosnail = {
-    description = "OCSP response fetch timer for astrosnail";
-    wantedBy = [ "timers.target" ];
-    timerConfig.OnCalendar = "daily";
-    timerConfig.RandomizedDelaySec = "12h";
   };
 }
