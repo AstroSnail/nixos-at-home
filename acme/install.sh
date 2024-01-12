@@ -1,5 +1,3 @@
-# TODO: edit cert services to require account, instead of inverse requiredBy
-
 profile=${profile:?"'profile' variable missing!"}
 install_to=${install_to:?"'install_to' variable missing!"}
 
@@ -19,18 +17,6 @@ set_cert_vars () {
 
 set_account_vars () {
   account_target_file=/etc/systemd/system/acme-account-${account}.target
-  account_to_required_by
-}
-
-set_req_by_cert_vars () {
-  account_target_link=/etc/systemd/system/acme-${req_by_cert}.service.requires/acme-account-${account}.target
-}
-
-account_to_required_by () {
-  case ${account} in
-###REQUIREDBY###
-    (*) required_by=;;
-  esac
 }
 
 linky () {
@@ -67,11 +53,6 @@ for account
 do
   set_account_vars
   linky "${profile}${account_target_file}" "${install_to}${account_target_file}"
-  for req_by_cert in ${required_by}
-  do
-    set_req_by_cert_vars
-    linky_relative "${install_to}${account_target_link}"
-  done
 done
 
 cat >"${install_to}/DEBIAN/postinst" <<-'EOF'

@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./install.nix ./units.nix ];
+  imports = [ ./account-configs.nix ./install.nix ./units.nix ];
 
   security.acme.acceptTerms = true;
   security.acme.maxConcurrentRenewals = 1;
