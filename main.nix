@@ -81,7 +81,7 @@
         yggd-pub =
           "010dfebad3b4649b587501b9dfe1219411bfb413d5a3cd499be2fe1aa64676f3";
         # OVHcloud Gravelines
-        loc = "51 1 0 N 2 9 20 E 0m 200m 1000m 20m";
+        loc = "51 1 N 2 9 E 0m 500m 2000m 100m";
         sshfp =
           "4 2 8541fb35fc4db160d2836bf49f5e239c9f5869037c4851777f72d51704e5655f";
       };
@@ -120,6 +120,28 @@
         yggd-addr = "200:2853:f73e:b83a:4275:16bf:208:abe4";
         yggd-pub =
           "ebd60460a3e2dec574a07efbaa0db3d640e8c80da7321dcd2585b2ad6d1571e9";
+      };
+
+      sunrise = {
+        ipv4 = "162.55.184.64";
+        ipv6 = "2a01:4f8:c0c:1013::1";
+        #wg-addr = "";
+        #wg-pub = "";
+        #yggd-addr = "";
+        #yggd-pub = "";
+        loc = "49 27 N 11 1 E 300m 500m 2000m 100m";
+        sshfp = "4 2 9ae2cb1a3c3276dce2aba204bc0db398a0a01c75a253af174bfa74c5d4bfafd1";
+      };
+
+      sea2 = {
+        ipv4 = "149.56.12.16";
+        ipv6 = "2607:5300:201:3100::85d2";
+        #wg-addr = "";
+        #wg-pub = "";
+        #yggd-addr = "";
+        #yggd-pub = "";
+        loc = "45 19 N 73 54 W 0m 500m 2000m 100m";
+        sshfp = "4 2 f8a66351be3c68ff22da9dd23136e8979ef6da4a0c731276abc9b2ff8f0bed61";
       };
     };
     this-host = config.hosts.${config.networking.hostName};
