@@ -10,7 +10,8 @@ set_cert_vars () {
   service_file=/etc/systemd/system/acme-${cert}.service
   selfcert_service_file=/etc/systemd/system/acme-selfsigned-${cert}.service
   ocsp_service_file=/etc/systemd/system/acme-ocsp-${cert}.service
-  target_file=/etc/systemd/system/acme-finished-${cert}.target
+  finished_target_file=/etc/systemd/system/acme-finished-${cert}.target
+  target_file=/etc/systemd/system/acme-${cert}.target
   timer_file=/etc/systemd/system/acme-${cert}.timer
   timer_link=/etc/systemd/system/timers.target.wants/acme-${cert}.timer
 }
@@ -43,6 +44,7 @@ do
   linky "${profile}${service_file}" "${install_to}${service_file}"
   linky "${profile}${selfcert_service_file}" "${install_to}${selfcert_service_file}"
   linky "${profile}${ocsp_service_file}" "${install_to}${ocsp_service_file}"
+  linky "${profile}${finished_target_file}" "${install_to}${finished_target_file}"
   linky "${profile}${target_file}" "${install_to}${target_file}"
   linky "${profile}${timer_file}" "${install_to}${timer_file}"
   linky_relative "${install_to}${timer_link}"

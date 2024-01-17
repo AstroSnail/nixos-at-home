@@ -15,14 +15,21 @@ lib.mkMerge [
         lib.concatLists (lib.mapAttrsToList dependantServices account-configs);
     in lib.listToAttrs allServices;
   }
-  {
 
+  {
     systemd.targets.acme-finished-astrosnail.requires =
       [ "acme-ocsp-astrosnail.service" ];
     systemd.targets.acme-finished-astrosnail.after =
       [ "acme-ocsp-astrosnail.service" ];
+
+    systemd.targets.acme-astrosnail.requires =
+      [ "acme-astrosnail.service" "acme-ocsp-astrosnail.service" ];
+    systemd.targets.acme-astrosnail.after =
+      [ "acme-astrosnail.service" "acme-ocsp-astrosnail.service" ];
+    systemd.targets.acme-astrosnail.unitConfig.StopWhenUnneeded = true;
+
     systemd.timers.acme-astrosnail.timerConfig.Unit =
-      lib.mkForce "acme-finished-astrosnail.target";
+      lib.mkForce "acme-astrosnail.target";
 
     systemd.services.acme-ocsp-astrosnail = {
       description = "OCSP response fetcher for astrosnail";
