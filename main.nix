@@ -130,7 +130,8 @@
         #yggd-addr = "";
         #yggd-pub = "";
         loc = "49 27 N 11 1 E 300m 500m 2000m 100m";
-        sshfp = "4 2 9ae2cb1a3c3276dce2aba204bc0db398a0a01c75a253af174bfa74c5d4bfafd1";
+        sshfp =
+          "4 2 9ae2cb1a3c3276dce2aba204bc0db398a0a01c75a253af174bfa74c5d4bfafd1";
       };
 
       sea2 = {
@@ -141,7 +142,8 @@
         #yggd-addr = "";
         #yggd-pub = "";
         loc = "45 19 N 73 54 W 0m 500m 2000m 100m";
-        sshfp = "4 2 f8a66351be3c68ff22da9dd23136e8979ef6da4a0c731276abc9b2ff8f0bed61";
+        sshfp =
+          "4 2 f8a66351be3c68ff22da9dd23136e8979ef6da4a0c731276abc9b2ff8f0bed61";
       };
     };
     this-host = config.hosts.${config.networking.hostName};
