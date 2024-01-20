@@ -9,8 +9,8 @@ lib.mkMerge [
         lib.nameValuePair "acme-${cert}" {
           requires = [ "acme-account-${hash}.target" ];
         };
-      dependantServices = hash: confs:
-        lib.lists.map (conf: dependantService hash conf.cert) (lib.tail confs);
+      dependantServices = hash: certs:
+        lib.lists.map (dependantService hash) (lib.tail certs);
       allServices =
         lib.concatLists (lib.mapAttrsToList dependantServices account-configs);
     in lib.listToAttrs allServices;

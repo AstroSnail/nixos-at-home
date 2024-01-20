@@ -7,7 +7,7 @@
     Sandbox = true;
   };
   services.tor.relay.onionServices.astroslomofimguy = {
-    map = builtins.map (port: {
+    map = lib.lists.map (port: {
       inherit port;
       target = {
         inherit port;

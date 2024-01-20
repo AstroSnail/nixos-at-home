@@ -4,48 +4,39 @@ let
   key-to-zone = host: key: value:
     let
       recordData = {
-        ipv4 = {
-          prefix = "";
-          type = "A";
-          qvalue = value;
-        };
-        ipv6 = {
-          prefix = "";
-          type = "AAAA";
-          qvalue = value;
-        };
-        wg-addr = {
-          prefix = "wireguard.";
-          type = "AAAA";
-          qvalue = value;
-        };
-        wg-pub = {
-          prefix = "wireguard.";
-          type = "TXT";
-          qvalue = ''"${value}"'';
-        };
-        yggd-addr = {
-          prefix = "yggdrasil.";
-          type = "AAAA";
-          qvalue = value;
-        };
-        yggd-pub = {
-          prefix = "yggdrasil.";
-          type = "TXT";
-          qvalue = ''"${value}"'';
-        };
-        loc = {
-          prefix = "";
-          type = "LOC";
-          qvalue = value;
-        };
-        sshfp = {
-          prefix = "";
-          type = "SSHFP";
-          qvalue = value;
-        };
+        ipv4.prefix = "";
+        ipv4.type = "A";
+        ipv4.qvalue = value;
+
+        ipv6.prefix = "";
+        ipv6.type = "AAAA";
+        ipv6.qvalue = value;
+
+        wg-addr.prefix = "wireguard.";
+        wg-addr.type = "AAAA";
+        wg-addr.qvalue = value;
+
+        wg-pub.prefix = "wireguard.";
+        wg-pub.type = "TXT";
+        wg-pub.qvalue = ''"${value}"'';
+
+        yggd-addr.prefix = "yggdrasil.";
+        yggd-addr.type = "AAAA";
+        yggd-addr.qvalue = value;
+
+        yggd-pub.prefix = "yggdrasil.";
+        yggd-pub.type = "TXT";
+        yggd-pub.qvalue = ''"${value}"'';
+
+        loc.prefix = "";
+        loc.type = "LOC";
+        loc.qvalue = value;
+
+        sshfp.prefix = "";
+        sshfp.type = "SSHFP";
+        sshfp.qvalue = value;
       };
-    in lib.optionalString (value != null && recordData ? ${key})
+    in lib.optionalString (recordData ? ${key} && value != null)
     (with recordData.${key}; ''
       ${prefix}${host} ${type} ${qvalue}
     '');

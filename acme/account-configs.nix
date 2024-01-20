@@ -13,6 +13,7 @@ let
   };
   certConfigs = lib.mapAttrsToList certToConfig;
   account-configs = certs:
-    lib.groupBy (conf: conf.accountHash) (certConfigs certs);
+    lib.groupBy' (certs: conf: certs ++ [ conf.cert ]) [ ]
+    (conf: conf.accountHash) (certConfigs certs);
 
 in { lib.acme = { inherit account-configs; }; }

@@ -8,11 +8,9 @@ let
       bool = if value then "yes" else "no";
       list = lib.concatMapStringsSep "," value-to-conf value;
     }.${builtins.typeOf value} or (builtins.toString value);
-  gen-line = name: value: "${name}=${value-to-conf value}";
-  gen-config = lib.flip lib.pipe [
-    (lib.mapAttrs gen-line)
-    lib.attrValues
-    (lib.concatStringsSep "\n")
-  ];
+  gen-line = name: value: ''
+    ${name}=${value-to-conf value}
+  '';
+  gen-config = conf: lib.concatStrings (lib.mapAttrsToList gen-line conf);
 
 in { lib.pdns = { inherit gen-config; }; }

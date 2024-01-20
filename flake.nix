@@ -23,10 +23,7 @@
       lib = nixpkgs.lib;
       forAllSystems = lib.genAttrs supportedSystems;
       forAllServices = lib.genAttrs services;
-      # does there not exist a concat-map for attribute sets?
-      # there exists lib.concatMapAttrs but i want to take a list, not attrset
-      forAllServicesFlat = f:
-        lib.foldl lib.trivial.mergeAttrs { } (lib.lists.map f services);
+      forAllServicesFlat = f: lib.listToAttrs (lib.concatMap f services);
 
       parse-flake = flakeSrc:
         let
@@ -47,9 +44,8 @@
 
       formatter = forAllSystems (system: self.packages.${system}.formatter);
 
-      nixosModules = forAllServices (name: import "${self}/${name}") // {
-        main = import "${self}/main.nix";
-      };
+      nixosModules = forAllServices
+        (name: { imports = [ "${self}/main.nix" "${self}/${name}" ]; });
 
       packages = forAllSystems (system:
         let
@@ -74,9 +70,7 @@
 
         in (forAllServicesFlat (name:
           let
-            modules = [{
-              imports = [ self.nixosModules.main self.nixosModules.${name} ];
-            }];
+            modules = [ self.nixosModules.${name} ];
 
             nixos = nixpkgs.lib.nixosSystem { inherit modules system; };
 
@@ -113,14 +107,14 @@
 
             nixos-system = nixos.config.system.build.toplevel;
 
-          in {
-            "app-${name}" = app;
-            "control-${name}" = control;
-            "install-${name}" = install;
-            "packager-${name}" = packager;
-            "package-${name}" = package;
-            "system-${name}" = nixos-system;
-          })) // {
+          in [
+            (lib.nameValuePair "app-${name}" app)
+            (lib.nameValuePair "control-${name}" control)
+            (lib.nameValuePair "install-${name}" install)
+            (lib.nameValuePair "packager-${name}" packager)
+            (lib.nameValuePair "package-${name}" package)
+            (lib.nameValuePair "system-${name}" nixos-system)
+          ])) // {
             inherit devShell formatter;
           });
 
