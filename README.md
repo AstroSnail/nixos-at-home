@@ -1,7 +1,7 @@
 # Get NixOS services on a not-NixOS system
 - You still need nix though.
-- Also requires that the system runs systemd because NixOS systems are based on
-  systemd.
+- Also requires that the system runs systemd because NixOS services are based
+  on systemd.
 - Also assumes the system uses `dpkg` (Debian, Ubuntu, ...) but you can
   probably work around that.
 
