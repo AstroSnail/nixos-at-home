@@ -2,7 +2,7 @@
 
 let
   zone-file = pkgs.writeText "astrosnail.pt.eu.org.zone"
-    (import ./astrosnail.pt.eu.org.zone.nix args);
+    (builtins.import ./astrosnail.pt.eu.org.zone.nix args);
 
   configDir =
     pkgs.writeTextDir "pdns.conf" config.services.powerdns.extraConfig;

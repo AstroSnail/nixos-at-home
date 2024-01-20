@@ -27,7 +27,7 @@
 
       parse-flake = flakeSrc:
         let
-          flake = import (flakeSrc + "/flake.nix");
+          flake = builtins.import (flakeSrc + "/flake.nix");
           outputs = flake.outputs { self = outputs; };
         in outputs;
 
@@ -50,15 +50,6 @@
       packages = forAllSystems (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-          nixpkgs-patched = pkgs.applyPatches {
-            name = "nixpkgs-patched";
-            src = nixpkgs;
-            patches = [ ./nixpkgs.patch ];
-          };
-          nixpkgs-patched-flake = parse-flake nixpkgs-patched;
-        in let
-          nixpkgs = nixpkgs-patched-flake;
-          pkgs = nixpkgs.legacyPackages.${system};
 
           devShell = pkgs.mkShell { buildInputs = [ pkgs.shellcheck ]; };
 
@@ -70,9 +61,18 @@
 
         in (forAllServicesFlat (name:
           let
+            nixpkgs-patched = if lib.pathExists ./${name}/nixpkgs.patch then
+              parse-flake (pkgs.applyPatches {
+                name = "nixpkgs-patched";
+                src = nixpkgs;
+                patches = [ ./${name}/nixpkgs.patch ];
+              })
+            else
+              nixpkgs;
+
             modules = [ self.nixosModules.${name} ];
 
-            nixos = nixpkgs.lib.nixosSystem { inherit modules system; };
+            nixos = nixpkgs-patched.lib.nixosSystem { inherit modules system; };
 
             app = pkgs.writeShellApplication {
               inherit name;
