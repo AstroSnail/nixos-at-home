@@ -40,6 +40,9 @@
 - `sudo nix run .#yggdrasil help` to see a summary of things you can do.
 - `nix build .#package-yggdrasil` to get a Debian/Ubuntu package containing the
   symlinks to the service's profile.
+  - Install with `apt install ./result/share/service-yggdrasil.deb`. When the
+    `install.sh` script is modified, very likely you'll need to rebuild and
+    reinstall the package.
 - You'll need to manually start and stop the service,
   e.g. `sudo systemctl start yggdrasil.service`.
 - The service is automatically enabled though (mainly to reduce the amount of
