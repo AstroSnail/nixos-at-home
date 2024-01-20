@@ -59,7 +59,7 @@
       apps = forAllSystems (system:
         forAllServices (name: {
           type = "app";
-          program = self.packages.${system}."app-${name}";
+          program = builtins.toString self.packages.${system}."app-${name}";
         }));
 
       devShells =
