@@ -50,13 +50,22 @@ in {
       unitConfig.ConditionPathExists = "/var/lib/pdns/rollover-zsk.txt";
       serviceConfig.Type = "oneshot";
       script = ''
+        # DEBUG
+        echo 'Initial keys:'
+        pdnsutil --config-dir=${configDir} list-keys astrosnail.pt.eu.org
         echo 'Current ZSK:'
         cat /var/lib/pdns/rollover-zsk.txt
+
+        # PROCESS
         pdnsutil --config-dir=${configDir} add-zone-key astrosnail.pt.eu.org zsk inactive published ed25519 >/var/lib/pdns/rollover-zsk-new.txt
-        echo 'Adding ZSK:'
-        cat /var/lib/pdns/rollover-zsk-new.txt
         pdnsutil --config-dir=${configDir} rectify-all-zones
         sqlite3 /var/lib/pdns/gsqlite3.sqlite "analyze;"
+
+        # DEBUG
+        echo 'Added ZSK:'
+        cat /var/lib/pdns/rollover-zsk-new.txt
+        echo 'Final keys:'
+        pdnsutil --config-dir=${configDir} list-keys astrosnail.pt.eu.org
       '';
     };
     pdns-rollover-zsk-phase2 = {
@@ -68,16 +77,25 @@ in {
       ];
       serviceConfig.Type = "oneshot";
       script = ''
-        zskOld=$(cat /var/lib/pdns/rollover-zsk.txt)
+        # DEBUG
+        echo 'Initial keys:'
+        pdnsutil --config-dir=${configDir} list-keys astrosnail.pt.eu.org
         echo 'Deactivating ZSK:'
         cat /var/lib/pdns/rollover-zsk.txt
-        zskNew=$(cat /var/lib/pdns/rollover-zsk-new.txt)
         echo 'Activating ZSK:'
         cat /var/lib/pdns/rollover-zsk-new.txt
+
+        # PROCESS
+        zskOld=$(cat /var/lib/pdns/rollover-zsk.txt)
+        zskNew=$(cat /var/lib/pdns/rollover-zsk-new.txt)
         pdnsutil --config-dir=${configDir} activate-zone-key astrosnail.pt.eu.org "$zskNew"
         pdnsutil --config-dir=${configDir} deactivate-zone-key astrosnail.pt.eu.org "$zskOld"
         pdnsutil --config-dir=${configDir} rectify-all-zones
         sqlite3 /var/lib/pdns/gsqlite3.sqlite "analyze;"
+
+        # DEBUG
+        echo 'Final keys:'
+        pdnsutil --config-dir=${configDir} list-keys astrosnail.pt.eu.org
       '';
     };
     pdns-rollover-zsk-phase3 = {
@@ -89,15 +107,24 @@ in {
       ];
       serviceConfig.Type = "oneshot";
       script = ''
-        zskOld=$(cat /var/lib/pdns/rollover-zsk.txt)
+        # DEBUG
+        echo 'Initial keys:'
+        pdnsutil --config-dir=${configDir} list-keys astrosnail.pt.eu.org
         echo 'Removing ZSK:'
         cat /var/lib/pdns/rollover-zsk.txt
+
+        # PROCESS
+        zskOld=$(cat /var/lib/pdns/rollover-zsk.txt)
         pdnsutil --config-dir=${configDir} remove-zone-key astrosnail.pt.eu.org "$zskOld"
         pdnsutil --config-dir=${configDir} rectify-all-zones
         sqlite3 /var/lib/pdns/gsqlite3.sqlite "analyze;"
         mv /var/lib/pdns/rollover-zsk-new.txt /var/lib/pdns/rollover-zsk.txt
+
+        # DEBUG
         echo 'Current ZSK:'
         cat /var/lib/pdns/rollover-zsk.txt
+        echo 'Final keys:'
+        pdnsutil --config-dir=${configDir} list-keys astrosnail.pt.eu.org
       '';
     };
     pdns-rollover-ksk-phase1 = {
@@ -106,13 +133,22 @@ in {
       unitConfig.ConditionPathExists = "/var/lib/pdns/rollover-ksk.txt";
       serviceConfig.Type = "oneshot";
       script = ''
+        # DEBUG
+        echo 'Initial keys:'
+        pdnsutil --config-dir=${configDir} list-keys astrosnail.pt.eu.org
         echo 'Current KSK:'
         cat /var/lib/pdns/rollover-ksk.txt
+
+        # PROCESS
         pdnsutil --config-dir=${configDir} add-zone-key astrosnail.pt.eu.org ksk active published ed25519 >/var/lib/pdns/rollover-ksk-new.txt
-        echo 'Adding KSK:'
-        cat /var/lib/pdns/rollover-ksk-new.txt
         pdnsutil --config-dir=${configDir} rectify-all-zones
         sqlite3 /var/lib/pdns/gsqlite3.sqlite "analyze;"
+
+        # DEBUG
+        echo 'Added KSK:'
+        cat /var/lib/pdns/rollover-ksk-new.txt
+        echo 'Final keys:'
+        pdnsutil --config-dir=${configDir} list-keys astrosnail.pt.eu.org
       '';
     };
     pdns-rollover-ksk-phase2 = {
@@ -124,15 +160,24 @@ in {
       ];
       serviceConfig.Type = "oneshot";
       script = ''
-        kskOld=$(cat /var/lib/pdns/rollover-ksk.txt)
+        # DEBUG
+        echo 'Initial keys:'
+        pdnsutil --config-dir=${configDir} list-keys astrosnail.pt.eu.org
         echo 'Removing KSK:'
         cat /var/lib/pdns/rollover-ksk.txt
+
+        # PROCESS
+        kskOld=$(cat /var/lib/pdns/rollover-ksk.txt)
         pdnsutil --config-dir=${configDir} remove-zone-key astrosnail.pt.eu.org "$kskOld"
         pdnsutil --config-dir=${configDir} rectify-all-zones
         sqlite3 /var/lib/pdns/gsqlite3.sqlite "analyze;"
         mv /var/lib/pdns/rollover-ksk-new.txt /var/lib/pdns/rollover-ksk.txt
+
+        # DEBUG
         echo 'Current KSK:'
         cat /var/lib/pdns/rollover-ksk.txt
+        echo 'Final keys:'
+        pdnsutil --config-dir=${configDir} list-keys astrosnail.pt.eu.org
       '';
     };
   };
