@@ -17,4 +17,6 @@
     certs-str
     account-hashes-str
   ] text;
+
+  postInstallScript = lib.readFile ./postinst.sh;
 }

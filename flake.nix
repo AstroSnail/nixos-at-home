@@ -36,7 +36,7 @@
       apps = forAllSystems (system:
         forAllServices (name: {
           type = "app";
-          program = "${self.packages.${system}."app-${name}"}/bin/${name}";
+          program = self.packages.${system}."app-${name}";
         }));
 
       devShells =
@@ -61,26 +61,35 @@
 
         in (forAllServicesFlat (name:
           let
-            nixpkgs-patched = if lib.pathExists ./${name}/nixpkgs.patch then
-              parse-flake (pkgs.applyPatches {
-                name = "nixpkgs-patched";
-                src = nixpkgs;
-                patches = [ ./${name}/nixpkgs.patch ];
-              })
-            else
-              nixpkgs;
+            nixpkgs-patched =
+              if lib.pathExists "${self}/${name}/nixpkgs.patch" then
+                parse-flake (pkgs.applyPatches {
+                  name = "nixpkgs-patched";
+                  src = nixpkgs;
+                  patches = [ "${self}/${name}/nixpkgs.patch" ];
+                })
+              else
+                nixpkgs;
 
             modules = [ self.nixosModules.${name} ];
 
             nixos = nixpkgs-patched.lib.nixosSystem { inherit modules system; };
 
-            app = pkgs.writeShellApplication {
+            app-script = pkgs.writeShellApplication {
               inherit name;
               runtimeInputs = [ pkgs.nix ];
-              text = ''
-                self=${self}
-                name=${name}
-              '' + (lib.readFile "${self}/profile.sh");
+              text = lib.readFile "${self}/profile.sh";
+            };
+
+            app = pkgs.stdenv.mkDerivation {
+              name = "app-${name}";
+              nativeBuildInputs = [ pkgs.makeWrapper ];
+              phases = [ "installPhase" ];
+              installPhase = ''
+                makeWrapper ${app-script}/bin/${name} $out \
+                  --set self ${self} \
+                  --set name ${name}
+              '';
             };
 
             control =
@@ -91,26 +100,44 @@
               text = nixos.config.installScript;
             };
 
-            packager = pkgs.writeShellApplication {
+            postinst = let script = nixos.config.postInstallScript;
+            in if script != "" then
+              pkgs.writeText "postinst-${name}" script
+            else
+              null;
+
+            packager-script = pkgs.writeShellApplication {
               inherit name;
               runtimeInputs = [ pkgs.dpkg ];
-              text = ''
-                name=${name}
-                control=${control}
-                install=${install}/bin/${name}
-              '' + (lib.readFile "${self}/packager.sh");
+              text = lib.readFile "${self}/packager.sh";
+            };
+
+            packager = pkgs.stdenv.mkDerivation {
+              name = "packager-${name}";
+              nativeBuildInputs = [ pkgs.makeWrapper ];
+              phases = [ "installPhase" ];
+              installPhase = ''
+                makeWrapper ${packager-script}/bin/${name} $out \
+                  --set name ${name} \
+                  --set control ${control} \
+                  --set install ${install}/bin/${name} \
+                  --set postinst '${builtins.toString postinst}'
+              '';
             };
 
             package = pkgs.runCommand "package-${name}" { } ''
-              ${packager}/bin/${name}
+              ${packager}
             '';
 
             nixos-system = nixos.config.system.build.toplevel;
 
           in [
+            (lib.nameValuePair "app-script-${name}" app-script)
             (lib.nameValuePair "app-${name}" app)
             (lib.nameValuePair "control-${name}" control)
             (lib.nameValuePair "install-${name}" install)
+            (lib.nameValuePair "postinst-${name}" postinst)
+            (lib.nameValuePair "packager-script-${name}" packager-script)
             (lib.nameValuePair "packager-${name}" packager)
             (lib.nameValuePair "package-${name}" package)
             (lib.nameValuePair "system-${name}" nixos-system)

@@ -28,6 +28,7 @@
     # for building the packages
     debianControl = optionLines;
     installScript = optionLines;
+    postInstallScript = optionLines;
 
     # useful data
     email = optionStr;

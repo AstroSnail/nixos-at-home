@@ -57,4 +57,5 @@
   '';
 
   installScript = lib.readFile ./install.sh;
+  postInstallScript = lib.readFile ./postinst.sh;
 }

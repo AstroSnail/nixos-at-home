@@ -48,22 +48,3 @@ linky "${profile}${rollover_ksk_phase2_service_file}" "${install_to}${rollover_k
 linky "${profile}${rollover_ksk_phase2_timer_file}" "${install_to}${rollover_ksk_phase2_timer_file}"
 linky "${profile}${rollover_target_file}" "${install_to}${rollover_target_file}"
 linky_relative "${install_to}${rollover_target_link}"
-
-cat >"${install_to}/DEBIAN/postinst" <<-'EOF'
-	#!/bin/sh
-	set -eu
-	case $1 in
-	  (configure)
-	    if ! getent passwd pdns >/dev/null
-	    then adduser --system --home /var/lib/pdns --group --gecos 'PowerDNS' pdns
-	    fi
-	    ;;
-	  (abort-upgrade|abort-remove|abort-deconfigure)
-	    ;;
-	  (*)
-	    echo "Unknown argument: $1" >&2
-	    exit 1
-	    ;;
-	esac
-EOF
-chmod +x "${install_to}/DEBIAN/postinst"

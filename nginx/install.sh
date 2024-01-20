@@ -22,22 +22,3 @@ linky "${profile}${service_file}" "${install_to}${service_file}"
 linky_relative "${install_to}${service_link}"
 linky "${profile}${logrotate_file}" "${install_to}${logrotate_file}"
 linky "${profile}${tmpfiles_file}" "${install_to}${tmpfiles_file}"
-
-cat >"${install_to}/DEBIAN/postinst" <<-'EOF'
-	#!/bin/sh
-	set -eu
-	case $1 in
-	  (configure)
-	    if ! getent passwd nginx >/dev/null
-	    then adduser --system --group nginx
-	    fi
-	    ;;
-	  (abort-upgrade|abort-remove|abort-deconfigure)
-	    ;;
-	  (*)
-	    echo "Unknown argument: $1" >&2
-	    exit 1
-	    ;;
-	esac
-EOF
-chmod +x "${install_to}/DEBIAN/postinst"
