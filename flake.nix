@@ -18,9 +18,13 @@
         "wireguard"
         "yggdrasil"
       ];
-      supportedSystems = [ "x86_64-linux" ];
+      hostSystems = {
+        x86_64-linux = [ "sea" "sea2" ];
+        aarch64-linux = [ "sunrise" ];
+      };
 
       lib = nixpkgs.lib;
+      supportedSystems = lib.attrNames hostSystems;
       forAllSystems = lib.genAttrs supportedSystems;
       forAllServices = lib.genAttrs services;
       forAllServicesFlat = f: lib.listToAttrs (lib.concatMap f services);
@@ -30,6 +34,25 @@
           flake = builtins.import (flakeSrc + "/flake.nix");
           outputs = flake.outputs { self = outputs; };
         in outputs;
+
+      make-nixos = { pkgs, system, host, name }:
+        let
+          nixpkgs-patched =
+            if lib.pathExists "${self}/${name}/nixpkgs.patch" then
+              parse-flake (pkgs.applyPatches {
+                name = "nixpkgs-patched";
+                src = nixpkgs;
+                patches = [ "${self}/${name}/nixpkgs.patch" ];
+              })
+            else
+              nixpkgs;
+
+          modules =
+            [ self.nixosModules.${name} { networking.hostName = host; } ];
+
+          nixos = nixpkgs-patched.lib.nixosSystem { inherit modules system; };
+
+        in nixos;
 
     in {
 
@@ -47,6 +70,12 @@
       nixosModules = forAllServices
         (name: { imports = [ "${self}/main.nix" "${self}/${name}" ]; });
 
+      nixosConfigurations = forAllServicesFlat (name:
+        let
+        in [
+          #(lib.nameValuePair "app-${name}" app)
+        ]);
+
       packages = forAllSystems (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
@@ -61,19 +90,10 @@
 
         in (forAllServicesFlat (name:
           let
-            nixpkgs-patched =
-              if lib.pathExists "${self}/${name}/nixpkgs.patch" then
-                parse-flake (pkgs.applyPatches {
-                  name = "nixpkgs-patched";
-                  src = nixpkgs;
-                  patches = [ "${self}/${name}/nixpkgs.patch" ];
-                })
-              else
-                nixpkgs;
-
-            modules = [ self.nixosModules.${name} ];
-
-            nixos = nixpkgs-patched.lib.nixosSystem { inherit modules system; };
+            nixos = make-nixos {
+              inherit pkgs system name;
+              host = "sea";
+            };
 
             app-script = pkgs.writeShellApplication {
               inherit name;
@@ -132,13 +152,7 @@
             nixos-system = nixos.config.system.build.toplevel;
 
           in [
-            (lib.nameValuePair "app-script-${name}" app-script)
             (lib.nameValuePair "app-${name}" app)
-            (lib.nameValuePair "control-${name}" control)
-            (lib.nameValuePair "install-${name}" install)
-            (lib.nameValuePair "postinst-${name}" postinst)
-            (lib.nameValuePair "packager-script-${name}" packager-script)
-            (lib.nameValuePair "packager-${name}" packager)
             (lib.nameValuePair "package-${name}" package)
             (lib.nameValuePair "system-${name}" nixos-system)
           ])) // {

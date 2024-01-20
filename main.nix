@@ -44,10 +44,8 @@
     system.stateVersion = lib.mkDefault config.system.nixos.release;
 
     # "system-wide" config
-    networking.hostName = "sea";
-    networking.domain = "astrosnail.pt.eu.org";
-
     # TODO: separate and link in, as this is very generally useful
+    networking.domain = "astrosnail.pt.eu.org";
     email = "astrosnail@protonmail.com";
 
     # retired
