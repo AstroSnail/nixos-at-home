@@ -9,7 +9,11 @@
       "tcp://${config.this-host.ipv4}:123"
       "tcp://[${config.this-host.ipv6}]:123"
     ];
-    AllowedPublicKeys = lib.catAttrs "yggd-pub" (lib.attrValues config.hosts);
+    AllowedPublicKeys = lib.flip lib.pipe [
+      lib.attrValues
+      (lib.catAttrs "yggd-pub")
+      (lib.remove null)
+    ] config.hosts;
     Peers = lib.concatMap (host:
       lib.optionals (host != config.this-host) [
         "tcp://${host.ipv4}:123"
