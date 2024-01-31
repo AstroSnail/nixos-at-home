@@ -41,6 +41,7 @@ in ''
                   CAA      0 contactemail "${config.email}"
                   RP     ${email-soa} erry
                   TXT    "keybase-site-verification=HNPj0etgb3YWy5gfHR9xtMucE44Lh5siUnf4UdQY45g"
+  _atproto        TXT    "did=did:plc:zsgbsyy7g7gau3ivhyp4wbiy"
   _discord        TXT    "dh=00f817f17b0475918afcc1c4412ed4effa42427b"
   _ens            TXT    "a=0x4650264Dd8Fb4e32A88168E6206e0779D11800c7"
   _validation-contactemail  TXT  "${config.email}"
