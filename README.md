@@ -35,14 +35,14 @@
     user's profile directory, but if you're not using a package for a
     particular module then you can link it to your own user's profile and
     figure it out yourself.
-- `sudo nix run .#yggdrasil history` to see the profile history,
-  `sudo nix run .#yggdrasil rollback --to 123` to switch to another version.
-- `sudo nix run .#yggdrasil help` to see a summary of things you can do.
 - `nix build .#package-yggdrasil` to get a Debian/Ubuntu package containing the
   symlinks to the service's profile.
   - Install with `apt install ./result/share/service-yggdrasil.deb`. When the
     `install.sh` script is modified, you'll very likely need to rebuild and
     reinstall the package.
+- `sudo nix run .#yggdrasil history` to see the profile history,
+  `sudo nix run .#yggdrasil rollback --to 123` to switch to another version.
+- `sudo nix run .#yggdrasil help` to see a summary of things you can do.
 - You'll need to manually start and stop the service,
   e.g. `sudo systemctl start yggdrasil.service`.
 - The service is automatically enabled though (mainly to reduce the amount of
