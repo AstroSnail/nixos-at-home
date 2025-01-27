@@ -1,7 +1,7 @@
 {
   description = "Services flake";
 
-  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11"; };
+  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11"; };
 
   outputs = { self, nixpkgs }:
     let
