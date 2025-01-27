@@ -18,9 +18,9 @@
   #services.nginx.sslCiphers = "";
   services.nginx.sslDhparam = config.security.dhparams.params.nginx.path;
   services.nginx.sslProtocols = "TLSv1.3";
-  services.nginx.appendHttpConfig = ''
-    ssl_stapling_file /var/lib/acme/astrosnail/ocsp.der;
-  '';
+  #services.nginx.appendHttpConfig = ''
+  #  ssl_stapling_file /var/lib/acme/astrosnail/ocsp.der;
+  #'';
 
   environment.etc."logrotate.d/nginx".text = ''
     /var/log/nginx/*.log {

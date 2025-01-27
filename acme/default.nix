@@ -10,7 +10,7 @@
   security.acme.defaults.dnsProvider = "rfc2136";
   security.acme.defaults.environmentFile =
     pkgs.writeText "credentials.txt" "RFC2136_NAMESERVER=[::1]:53";
-  security.acme.defaults.ocspMustStaple = true;
+  #security.acme.defaults.ocspMustStaple = true; # let's encrypt no longer supports
   security.acme.defaults.reloadServices = [ "dnsdist.service" "nginx.service" ];
   security.acme.certs.astrosnail = {
     domain = "astrosnail.pt.eu.org";
