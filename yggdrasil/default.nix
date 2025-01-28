@@ -33,15 +33,6 @@
     MulticastInterfaces = [ ];
   };
 
-  systemd.services.yggdrasil.requires = [ "yggdrasil-activation.service" ];
-
-  systemd.services.yggdrasil-activation = {
-    description = "Activation script for yggdrasil";
-    before = [ "yggdrasil.service" ];
-    script = config.system.activationScripts.yggdrasil;
-    serviceConfig.Type = "oneshot";
-  };
-
   debianControl = ''
     Architecture: all
     Description: service-yggdrasil
