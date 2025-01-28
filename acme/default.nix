@@ -14,6 +14,7 @@
   security.acme.defaults.dnsProvider = "rfc2136";
   security.acme.defaults.environmentFile = pkgs.writeText "credentials.txt" "RFC2136_NAMESERVER=[::1]:53";
   security.acme.defaults.ocspMustStaple = false; # let's encrypt no longer supports
+  security.acme.defaults.server = null; # ensure account hash stays the same
   security.acme.defaults.reloadServices = [
     "dnsdist.service"
     "nginx.service"
