@@ -32,7 +32,7 @@
 
       locations = {
         "= /dns-query".proxyPass = "http://[::1]";
-        "/".return = "404";
+        "/".return = 404;
       };
       headers = ''
         add_header Content-Security-Policy "default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox; upgrade-insecure-requests" always;
