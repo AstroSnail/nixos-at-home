@@ -12,7 +12,6 @@
     local certFile = '/var/lib/acme/astrosnail/fullchain.pem'
     local keyFile = '/var/lib/acme/astrosnail/key.pem'
     local options = {
-      --ocspResponses = { '/var/lib/acme/astrosnail/ocsp.der' },
       minTLSVersion = 'tls1.3',
       additionalAddresses = {
         -- dnsdist is buggy and needs ports here
