@@ -6,7 +6,7 @@
     Maintainer: Erry <${config.email}>
     Package: ubuntu-advantage-tools-stub
     Version: 0.1.0-1
-    Provides: ubuntu-advantage-tools
+    Provides: ubuntu-advantage-tools (= 30~)
     Conflicts: ubuntu-advantage-tools
     Replaces: ubuntu-advantage-tools
   '';
