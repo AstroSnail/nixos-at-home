@@ -12,7 +12,7 @@
   services.nginx.recommendedOptimisation = true;
   services.nginx.recommendedProxySettings = true;
   services.nginx.recommendedTlsSettings = true;
-  services.nginx.recommendedZstdSettings = true;
+  #services.nginx.recommendedZstdSettings = true; # adds zstd module, requires recompiling nginx
   services.nginx.serverNamesHashBucketSize = 128;
   services.nginx.serverTokens = true;
   #services.nginx.sslCiphers = "";
