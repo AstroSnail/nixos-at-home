@@ -1,4 +1,5 @@
-{ config, ... }: {
+{ config, ... }:
+{
   debianControl = ''
     Architecture: all
     Description: ubuntu-advantage-tools-stub

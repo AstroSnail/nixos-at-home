@@ -1,7 +1,8 @@
 { lib, ... }:
 
 let
-  key-to-zone = host: key: value:
+  key-to-zone =
+    host: key: value:
     let
       recordData = {
         ipv4.prefix = "";
@@ -36,13 +37,17 @@ let
         sshfp.type = "SSHFP";
         sshfp.qvalue = value;
       };
-    in lib.optionalString (recordData ? ${key} && value != null)
-    (with recordData.${key}; ''
-      ${prefix}${host} ${type} ${qvalue}
-    '');
-  host-to-zone = host: data:
-    lib.concatStrings (lib.mapAttrsToList (key-to-zone host) data);
-  hosts-to-zone = hosts:
-    lib.concatStrings (lib.mapAttrsToList host-to-zone hosts);
+    in
+    lib.optionalString (recordData ? ${key} && value != null) (
+      with recordData.${key};
+      ''
+        ${prefix}${host} ${type} ${qvalue}
+      ''
+    );
+  host-to-zone = host: data: lib.concatStrings (lib.mapAttrsToList (key-to-zone host) data);
+  hosts-to-zone = hosts: lib.concatStrings (lib.mapAttrsToList host-to-zone hosts);
 
-in { lib.pdns = { inherit hosts-to-zone; }; }
+in
+{
+  lib.pdns = { inherit hosts-to-zone; };
+}

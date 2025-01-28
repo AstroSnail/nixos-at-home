@@ -22,13 +22,14 @@
 
 let
   email-split = lib.splitString "@" config.email;
-  email-local-dots =
-    lib.replaceStrings [ "." ] [ "\\." ] (lib.elemAt email-split 0);
+  email-local-dots = lib.replaceStrings [ "." ] [ "\\." ] (lib.elemAt email-split 0);
   email-domain = lib.elemAt email-split 1;
-  email-soa = assert (lib.length email-split) == 2;
+  email-soa =
+    assert (lib.length email-split) == 2;
     "${email-local-dots}.${email-domain}.";
 
-in ''
+in
+''
   $ORIGIN astrosnail.pt.eu.org.
   $TTL 1d
 

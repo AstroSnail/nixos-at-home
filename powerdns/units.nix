@@ -1,20 +1,24 @@
 { config, pkgs, ... }@args:
 
 let
-  zone-file = pkgs.writeText "astrosnail.pt.eu.org.zone"
-    (builtins.import ./astrosnail.pt.eu.org.zone.nix args);
+  zone-file = pkgs.writeText "astrosnail.pt.eu.org.zone" (
+    builtins.import ./astrosnail.pt.eu.org.zone.nix args
+  );
 
-  configDir =
-    pkgs.writeTextDir "pdns.conf" config.services.powerdns.extraConfig;
+  configDir = pkgs.writeTextDir "pdns.conf" config.services.powerdns.extraConfig;
 
-in {
+in
+{
   systemd.services = {
     pdns.wants = [ "pdns-sqlite3-setup.service" ];
 
     pdns-sqlite3-setup = {
       description = "PowerDNS SQLite3 database setup";
       before = [ "pdns.service" ];
-      path = [ pkgs.pdns pkgs.sqlite ];
+      path = [
+        pkgs.pdns
+        pkgs.sqlite
+      ];
       unitConfig.ConditionPathExists = "!/var/lib/pdns/gsqlite3.sqlite";
       serviceConfig.Type = "oneshot";
       script = ''
@@ -34,7 +38,10 @@ in {
       description = "PowerDNS SQLite3 zone update from zonefile";
       after = [ "pdns-sqlite3-setup.service" ];
       wants = [ "pdns-sqlite3-setup.service" ];
-      path = [ pkgs.pdns pkgs.sqlite ];
+      path = [
+        pkgs.pdns
+        pkgs.sqlite
+      ];
       unitConfig.ConditionPathExists = "/var/lib/pdns/gsqlite3.sqlite";
       serviceConfig.Type = "oneshot";
       script = ''
@@ -46,7 +53,10 @@ in {
 
     pdns-rollover-zsk-phase1 = {
       description = "PowerDNS DNSSEC ZSK rollover: new DNSKEY";
-      path = [ pkgs.pdns pkgs.sqlite ];
+      path = [
+        pkgs.pdns
+        pkgs.sqlite
+      ];
       unitConfig.ConditionPathExists = "/var/lib/pdns/rollover-zsk.txt";
       serviceConfig.Type = "oneshot";
       script = ''
@@ -70,7 +80,10 @@ in {
     };
     pdns-rollover-zsk-phase2 = {
       description = "PowerDNS DNSSEC ZSK rollover: new RRSIGs";
-      path = [ pkgs.pdns pkgs.sqlite ];
+      path = [
+        pkgs.pdns
+        pkgs.sqlite
+      ];
       unitConfig.ConditionPathExists = [
         "/var/lib/pdns/rollover-zsk.txt"
         "/var/lib/pdns/rollover-zsk-new.txt"
@@ -100,7 +113,10 @@ in {
     };
     pdns-rollover-zsk-phase3 = {
       description = "PowerDNS DNSSEC ZSK rollover: DNSKEY removal";
-      path = [ pkgs.pdns pkgs.sqlite ];
+      path = [
+        pkgs.pdns
+        pkgs.sqlite
+      ];
       unitConfig.ConditionPathExists = [
         "/var/lib/pdns/rollover-zsk.txt"
         "/var/lib/pdns/rollover-zsk-new.txt"
@@ -129,7 +145,10 @@ in {
     };
     pdns-rollover-ksk-phase1 = {
       description = "PowerDNS DNSSEC KSK rollover: new DNSKEY";
-      path = [ pkgs.pdns pkgs.sqlite ];
+      path = [
+        pkgs.pdns
+        pkgs.sqlite
+      ];
       unitConfig.ConditionPathExists = "/var/lib/pdns/rollover-ksk.txt";
       serviceConfig.Type = "oneshot";
       script = ''
@@ -153,7 +172,10 @@ in {
     };
     pdns-rollover-ksk-phase2 = {
       description = "PowerDNS DNSSEC KSK rollover: DNSKEY removal";
-      path = [ pkgs.pdns pkgs.sqlite ];
+      path = [
+        pkgs.pdns
+        pkgs.sqlite
+      ];
       unitConfig.ConditionPathExists = [
         "/var/lib/pdns/rollover-ksk.txt"
         "/var/lib/pdns/rollover-ksk-new.txt"

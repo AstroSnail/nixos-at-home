@@ -14,12 +14,22 @@
       (lib.catAttrs "yggd-pub")
       (lib.remove null)
     ];
-    Peers = lib.concatMap (host:
-      lib.optionals (host != config.this-host) [
-        "tcp://${host.ipv4}:123"
-        "tcp://[${host.ipv6}]:123"
-      ]) [ config.hosts.soon config.hosts.sea ];
-    NodeInfo = { name = config.networking.fqdnOrHostName; };
+    Peers =
+      lib.concatMap
+        (
+          host:
+          lib.optionals (host != config.this-host) [
+            "tcp://${host.ipv4}:123"
+            "tcp://[${host.ipv6}]:123"
+          ]
+        )
+        [
+          config.hosts.soon
+          config.hosts.sea
+        ];
+    NodeInfo = {
+      name = config.networking.fqdnOrHostName;
+    };
     MulticastInterfaces = [ ];
   };
 

@@ -1,7 +1,11 @@
 { config, lib, ... }:
 
 {
-  imports = [ ./gen-config.nix ./hosts-to-zone.nix ./units.nix ];
+  imports = [
+    ./gen-config.nix
+    ./hosts-to-zone.nix
+    ./units.nix
+  ];
 
   services.powerdns.enable = true;
   services.powerdns.extraConfig = config.lib.pdns.gen-config {

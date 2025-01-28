@@ -1,22 +1,26 @@
 { config, lib, ... }:
 
 {
-  installScript = let
-    certs = lib.attrNames config.security.acme.certs;
-    certs-str = lib.concatStringsSep " " certs;
+  installScript =
+    let
+      certs = lib.attrNames config.security.acme.certs;
+      certs-str = lib.concatStringsSep " " certs;
 
-    account-configs =
-      config.lib.acme.account-configs config.security.acme.certs;
+      account-configs = config.lib.acme.account-configs config.security.acme.certs;
 
-    account-hashes = lib.attrNames account-configs;
-    account-hashes-str = lib.concatStringsSep " " account-hashes;
+      account-hashes = lib.attrNames account-configs;
+      account-hashes-str = lib.concatStringsSep " " account-hashes;
 
-    text = lib.readFile ./install.sh;
+      text = lib.readFile ./install.sh;
 
-  in lib.replaceStrings [ "###CERTS###" "###ACCOUNTS###" ] [
-    certs-str
-    account-hashes-str
-  ] text;
+    in
+    lib.replaceStrings
+      [ "###CERTS###" "###ACCOUNTS###" ]
+      [
+        certs-str
+        account-hashes-str
+      ]
+      text;
 
   postInstallScript = lib.readFile ./postinst.sh;
 }
