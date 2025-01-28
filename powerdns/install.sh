@@ -22,8 +22,8 @@ rollover_target_link=/etc/systemd/system/timers.target.wants/pdns-rollover.targe
 linky () {
   link_pointer=$1
   link_name=$2
-  mkdir --parents "${link_name%/*}"
-  ln --symbolic --no-target-directory "${link_pointer}" "${link_name}"
+  mkdir --parents -- "${link_name%/*}"
+  ln --symbolic --no-target-directory -- "${link_pointer}" "${link_name}"
 }
 
 linky_relative () {

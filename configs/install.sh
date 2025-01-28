@@ -12,14 +12,14 @@ update_notifier_hide_esm=/var/lib/update-notifier/hide-esm-in-motd
 linky () {
   link_pointer=$1
   link_name=$2
-  mkdir --parents "${link_name%/*}"
-  ln --symbolic --no-target-directory "${link_pointer}" "${link_name}"
+  mkdir --parents -- "${link_name%/*}"
+  ln --symbolic --no-target-directory -- "${link_pointer}" "${link_name}"
 }
 
 touchy () {
   file_name=$1
-  mkdir --parents "${file_name%/*}"
-  touch "${file_name}"
+  mkdir --parents -- "${file_name%/*}"
+  touch -- "${file_name}"
 }
 
 linky "${profile}${apt_periodic_file}" "${install_to}${apt_periodic_file}"

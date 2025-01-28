@@ -24,8 +24,8 @@ iface_to_peers () {
 linky () {
   link_pointer=$1
   link_name=$2
-  mkdir --parents "${link_name%/*}"
-  ln --symbolic --no-target-directory "${link_pointer}" "${link_name}"
+  mkdir --parents -- "${link_name%/*}"
+  ln --symbolic --no-target-directory -- "${link_pointer}" "${link_name}"
 }
 
 linky_relative () {
