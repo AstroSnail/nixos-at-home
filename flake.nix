@@ -54,7 +54,9 @@
         src:
         let
           flake = builtins.import (src + "/flake.nix");
-          outputs = flake.outputs { self = outputs; };
+          outputs = flake.outputs { self = outputs; } // {
+            outPath = src;
+          };
         in
         outputs;
 
