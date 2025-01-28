@@ -1,13 +1,13 @@
 diff --git a/nixos/modules/services/networking/nftables.nix b/nixos/modules/services/networking/nftables.nix
-index 424d005dc0b5..2b6822bfd5ca 100644
+index fc823b5ff597..b017564af195 100644
 --- a/nixos/modules/services/networking/nftables.nix
 +++ b/nixos/modules/services/networking/nftables.nix
-@@ -283,8 +283,6 @@ in
-           executable = true;
-           text = ''
-             #! ${pkgs.nftables}/bin/nft -f
--            # previous deletions, if any
--            include "${deletionsScriptVar}"
-             # current deletions
-             include "${deletionsScript}"
-             ${concatStringsSep "\n" (mapAttrsToList (_: table: ''
+@@ -323,8 +323,6 @@ in
+             executable = true;
+             text = ''
+               #! ${pkgs.nftables}/bin/nft -f
+-              # previous deletions, if any
+-              include "${deletionsScriptVar}"
+               # current deletions
+               include "${deletionsScript}"
+               ${concatStringsSep "\n" (
